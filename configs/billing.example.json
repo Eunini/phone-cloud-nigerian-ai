@@ -1,0 +1,14 @@
+{
+  "versioned-free-tier-model-id": {
+    "free_tier": true
+  },
+  "versioned-paid-price-scenario-id": {
+    "input_usd_per_million": null,
+    "output_usd_per_million": null,
+    "usd_to_ngn": null
+  },
+  "measured-self-hosted-model-id": {
+    "measured_cloud_usd_per_question": null,
+    "usd_to_ngn": null
+  }
+}

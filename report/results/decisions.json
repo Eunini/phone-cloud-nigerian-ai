@@ -1,0 +1,233 @@
+[
+  {
+    "language": "eng",
+    "task": "afrimgsm",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrimgsm",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrimgsm",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrimmlu",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrimmlu",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrimmlu",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrixnli",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrixnli",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "eng",
+    "task": "afrixnli",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrimgsm",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrimgsm",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrimgsm",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrimmlu",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrimmlu",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrimmlu",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrixnli",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrixnli",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "hau",
+    "task": "afrixnli",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrimgsm",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrimgsm",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrimgsm",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrimmlu",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrimmlu",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrimmlu",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrixnli",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrixnli",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "ibo",
+    "task": "afrixnli",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrimmlu",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrimmlu",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrimmlu",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrixnli",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrixnli",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrixnli",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  }
+]

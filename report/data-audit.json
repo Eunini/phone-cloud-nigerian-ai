@@ -1,0 +1,43 @@
+{
+  "seed": 2026,
+  "datasets": {
+    "afrimmlu": {
+      "dataset": "masakhane/afrimmlu",
+      "revision": "96f247619673906ae4c321a3232afc67b98ea57e",
+      "available": {
+        "yor": 500,
+        "hau": 500,
+        "ibo": 500,
+        "eng": 500
+      },
+      "selected_per_language": 300,
+      "selection": "same seeded row indices across languages; no replacement"
+    },
+    "afrixnli": {
+      "dataset": "masakhane/afrixnli",
+      "revision": "e3ca06b30f3e7af2a86f6c8609ea76fee326bc56",
+      "available": {
+        "yor": 600,
+        "hau": 600,
+        "ibo": 600,
+        "eng": 600
+      },
+      "selected_per_language": 300,
+      "selection": "same seeded row indices across languages; no replacement"
+    },
+    "afrimgsm": {
+      "dataset": "masakhane/afrimgsm",
+      "revision": "8e4268d2b94941f18f63f694cf48e4ae26fbec65",
+      "available": {
+        "yor": 250,
+        "hau": 250,
+        "ibo": 250,
+        "eng": 250
+      },
+      "selected_per_language": 250,
+      "selection": "same seeded row indices across languages; no replacement"
+    }
+  },
+  "n": 3400,
+  "items_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f"
+}

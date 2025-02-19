@@ -1,0 +1,10 @@
+{
+  "checked_date": "2026-10-25",
+  "units": "decimal MB; GB=1000 MB; base unrestricted data only",
+  "tariffs": [
+    {"id": "mtn-monthly-2.7gb", "provider": "MTN Nigeria", "price_ngn": 2000, "base_mb": 2700, "ngn_per_mb": 0.7407407407407407, "valid_days": 30, "source": "https://www.mtn.ng/data/data-plans/"},
+    {"id": "airtel-monthly-3gb", "provider": "Airtel Nigeria", "price_ngn": 2000, "base_mb": 3000, "ngn_per_mb": 0.6666666666666666, "valid_days": 30, "source": "https://www.airtel.com.ng/ng/personal/data/data_offers/data_plans"},
+    {"id": "mtn-payg", "provider": "MTN Nigeria", "ngn_per_mb": 3.07, "source": "https://www.mtn.ng/helppersonal/data-bundles/"}
+  ],
+  "notes": "Recomputed from base bundle price/volume. Excludes night/social bonuses. Operator display rates may include bonuses and use 1024 MB/GB. Expiry and unused quota change effective cost; these are marginal rates, not minimum bundle purchase costs."
+}
