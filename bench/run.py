@@ -30,7 +30,7 @@ class MemorySampler:
                     try:
                         rss = self.process.memory_info().rss
                         self.peak = max(self.peak or 0, rss)
-                    except psutil.NoSuchProcess:
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
                         return
                     self.stop.wait(0.05)
 
@@ -58,8 +58,16 @@ def main():
     p.add_argument("--translate", action="store_true")
     p.add_argument("--limit", type=int)
     p.add_argument("--max-tokens", type=int, default=128)
+    p.add_argument(
+        "--min-interval",
+        type=float,
+        default=0,
+        help="Minimum seconds between request starts; respect provider quotas",
+    )
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
+    if a.min_interval < 0:
+        p.error("--min-interval must be nonnegative")
     endpoint = Endpoint(a.endpoint, a.model, os.environ.get(a.key_env))
     items = [json.loads(x) for x in a.items.read_text().splitlines() if x.strip()]
     random.Random(2026).shuffle(items)
@@ -81,6 +89,7 @@ def main():
         "prompt_version": PROMPT_VERSION,
         "translate": a.translate,
         "max_tokens": a.max_tokens,
+        "min_interval_seconds": a.min_interval,
         "items_sha256": hashlib.sha256(a.items.read_bytes()).hexdigest(),
         "partial": a.limit is not None,
     }
@@ -152,6 +161,12 @@ def main():
                 record["end_to_end_seconds"] = time.perf_counter() - start
                 stream.write(json.dumps(record, ensure_ascii=False) + "\n")
                 stream.flush()
+                if record.get("http_status") in {401, 403, 429}:
+                    print(
+                        "Stopped after authentication/quota response; saved progress. Resume after resolving provider access/quota."
+                    )
+                    break
+                time.sleep(max(0, a.min_interval - (time.perf_counter() - start)))
     finally:
         endpoint.close()
 

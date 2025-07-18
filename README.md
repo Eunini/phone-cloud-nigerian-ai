@@ -1,7 +1,7 @@
 # Phone or cloud? The cost of AI in Nigerian languages
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
-parallel gold-answer agreement. Device and cloud accuracy measurements are pending.
+parallel gold-answer agreement. A 48-question shared-Linux pilot is recorded; physical-device and cloud comparisons are pending.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |
@@ -37,8 +37,9 @@ Repeat for the three revision-pinned model candidates in `configs/models.json`,
 at `Q4_K_M` and `Q8_0`. Download one model condition at a time if storage is limited.
 A Linux workstation run must be described as such; it is not an Android-phone run.
 
-For an Android/Termux build, use the same llama.cpp commit, install Termux's
-`cmake`, `clang`, `git` and `python`, and run the same server/evaluator commands.
+For Android, create the lightweight bundle with `scripts/android_bundle.py` and
+follow [the physical-device guide](report/android-guide.md). It avoids PyArrow
+and PyTorch installation on Termux, and builds the pinned llama.cpp revision.
 Record phone model, chipset, RAM, OS, battery/charging state, thread count and
 thermal conditions. Log at least three repeated runs before performance claims.
 
@@ -76,3 +77,8 @@ currency conversion evidence produce unknown costs rather than a zero estimate.
 
 See [background](report/background.md), [study report](report/report.md) and
 [remaining work](report/completion.md). A final CV claim requires measured runs.
+
+The local pilot completed 46 of 48 requests and recorded two pre-response
+`RemoteProtocolError` failures with their request-byte costs. This is an
+integration check, not an Android or final accuracy result. Pilot runs are
+excluded from the cheapest-eligible decision table.

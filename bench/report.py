@@ -38,6 +38,9 @@ def main():
             "partial": any(r.get("partial", False) for r in rows),
             "accuracy": sum(r.get("correct", False) for r in rows) / len(rows),
             "error_rate": 1 - len(good) / len(rows),
+            "accuracy_on_successful_requests": (
+                sum(r.get("correct", False) for r in good) / len(good) if good else None
+            ),
             "median_latency_seconds": statistics.median(r["end_to_end_seconds"] for r in rows),
         }
         if not good:
@@ -95,7 +98,7 @@ def main():
     (a.out / "summary.json").write_text(json.dumps(summaries, indent=2))
     fields = sorted(set().union(*(r.keys() for r in summaries)))
     with (a.out / "summary.csv").open("w") as stream:
-        writer = csv.DictWriter(stream, fields)
+        writer = csv.DictWriter(stream, fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(summaries)
     decisions = []

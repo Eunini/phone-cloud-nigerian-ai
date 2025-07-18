@@ -66,6 +66,7 @@ class Endpoint:
             content=body,
             headers={"Content-Type": "application/json", "Accept-Encoding": "identity"},
         ) as response:
+            self.telemetry["http_status"] = response.status_code
             if response.status_code != 200:
                 for chunk in response.iter_raw():
                     received += len(chunk)
