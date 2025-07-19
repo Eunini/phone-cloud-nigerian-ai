@@ -44,11 +44,24 @@ assert torch.cuda.is_available(), 'No GPU; no benchmark started'
 print('GPU:', torch.cuda.get_device_name(0), 'Python:', sys.version)
 env = os.environ.copy()
 env.update(HF_HOME='/kaggle/temp/huggingface', HF_HUB_DISABLE_IMPLICIT_TOKEN='1', CUDA_VISIBLE_DEVICES='0', VLLM_NO_USAGE_STATS='1')
+# Kaggle mounts the versioned driver library but can omit the libcuda.so linker
+# name needed by FlashInfer's JIT. Use the actual loaded driver, without root.
+import ctypes
+ctypes.CDLL('libcuda.so.1')
+drivers = {line.split()[-1] for line in pathlib.Path('/proc/self/maps').read_text().splitlines()
+           if 'libcuda.so' in line and pathlib.Path(line.split()[-1]).is_file()}
+assert drivers, 'CUDA driver loaded but its mounted file could not be located'
+linkdir = pathlib.Path('/kaggle/temp/cuda-driver-link'); linkdir.mkdir(exist_ok=True)
+link = linkdir/'libcuda.so'
+if not link.exists(): link.symlink_to(sorted(drivers)[0])
+env['LIBRARY_PATH'] = str(linkdir) + os.pathsep + env.get('LIBRARY_PATH','')
+env['LD_LIBRARY_PATH'] = str(linkdir) + os.pathsep + env.get('LD_LIBRARY_PATH','')
 venv = pathlib.Path('/kaggle/temp/vllm-env')
 subprocess.run([sys.executable, '-m', 'venv', '--without-pip', str(venv)], check=True)
 python = str(venv / 'bin/python')
 subprocess.run([sys.executable, '-m', 'pip', '--python', str(venv), 'install', '--no-cache-dir', 'vllm==0.11.2', 'psutil==7.2.2'], env=env, check=True)
 output = pathlib.Path('/kaggle/working/cloud-results'); output.mkdir(exist_ok=True)
+(output/'runtime-requirements.txt').write_text(subprocess.check_output([sys.executable,'-m','pip','--python',str(venv),'freeze'],text=True,env=env))
 model, revision = '__MODEL__', '__REVISION__'
 (output / 'run-provenance.json').write_text(json.dumps({'model':model,'revision':revision,'vllm':'0.11.2','gpu':torch.cuda.get_device_name(0),'items_sha256':hashlib.sha256((root/'data/prepared/items.jsonl').read_bytes()).hexdigest(),'latency_scope':'client and vLLM server on the same Kaggle host; excludes phone WAN RTT','cost_scope':'free research GPU quota; no continuously available public endpoint'},indent=2))
 with (output / 'vllm-server.log').open('w') as log:
