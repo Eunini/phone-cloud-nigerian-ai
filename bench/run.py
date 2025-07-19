@@ -6,6 +6,7 @@ import platform
 import random
 import threading
 import time
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -57,6 +58,11 @@ def main():
     p.add_argument("--server-pid", type=int)
     p.add_argument("--translate", action="store_true")
     p.add_argument("--limit", type=int)
+    p.add_argument(
+        "--max-new-requests",
+        type=int,
+        help="Stop and save after this many new questions; resume the same full run later",
+    )
     p.add_argument("--max-tokens", type=int, default=128)
     p.add_argument(
         "--min-interval",
@@ -66,10 +72,11 @@ def main():
     )
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
-    if a.min_interval < 0:
-        p.error("--min-interval must be nonnegative")
+    if a.min_interval < 0 or (a.max_new_requests is not None and a.max_new_requests < 1):
+        p.error("Use a nonnegative interval and positive new-request budget")
     endpoint = Endpoint(a.endpoint, a.model, os.environ.get(a.key_env))
     items = [json.loads(x) for x in a.items.read_text().splitlines() if x.strip()]
+    expected_groups = Counter((r["language"], r["task"]) for r in items)
     random.Random(2026).shuffle(items)
     if a.limit:
         items = items[: a.limit]
@@ -109,6 +116,7 @@ def main():
             + "\n"
         )
     try:
+        attempted = 0
         with a.out.open("a") as stream:
             for item in items:
                 if item["id"] in completed:
@@ -120,6 +128,7 @@ def main():
                     "id": item["id"],
                     "language": item["language"],
                     "task": item["task"],
+                    "expected_group_items": expected_groups[(item["language"], item["task"])],
                     "timestamp": datetime.now(timezone.utc).isoformat(),
                 }
                 try:
@@ -161,10 +170,14 @@ def main():
                 record["end_to_end_seconds"] = time.perf_counter() - start
                 stream.write(json.dumps(record, ensure_ascii=False) + "\n")
                 stream.flush()
+                attempted += 1
                 if record.get("http_status") in {401, 403, 429}:
                     print(
                         "Stopped after authentication/quota response; saved progress. Resume after resolving provider access/quota."
                     )
+                    break
+                if a.max_new_requests and attempted >= a.max_new_requests:
+                    print("Request budget reached; saved progress for a later resume.")
                     break
                 time.sleep(max(0, a.min_interval - (time.perf_counter() - start)))
     finally:

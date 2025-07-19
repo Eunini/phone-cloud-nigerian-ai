@@ -35,7 +35,15 @@ def main():
             "n": len(rows),
             "successful_requests": len(good),
             "attempts_including_retries": len(attempts),
-            "partial": any(r.get("partial", False) for r in rows),
+            "partial": any(r.get("partial", False) for r in rows)
+            or len(rows)
+            < max(
+                r.get(
+                    "expected_group_items",
+                    {"afrimmlu": 300, "afrixnli": 300, "afrimgsm": 250}[task],
+                )
+                for r in rows
+            ),
             "accuracy": sum(r.get("correct", False) for r in rows) / len(rows),
             "error_rate": 1 - len(good) / len(rows),
             "accuracy_on_successful_requests": (
@@ -141,7 +149,7 @@ def main():
         title="Phone or cloud? Measured accuracy and cost",
     )
     if any(row.get("partial") for row in summaries):
-        ax.set_title("Exploratory local pilot; full phone/cloud benchmarks pending")
+        ax.set_title("Partial exploratory benchmarks; full comparison pending")
     from matplotlib.lines import Line2D
 
     ax.legend(
