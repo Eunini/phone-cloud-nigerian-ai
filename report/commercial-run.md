@@ -31,6 +31,16 @@ Until every task/language group is complete, the report marks it partial and
 excludes it from the final decision table. Completing 3,400 questions at 500/day
 needs at least seven quota days, before translation and safety-study calls.
 
+The first batch recorded 450 question attempts: 395 successful responses and
+55 HTTP 503 failures. Continue with `python -m bench.resume_commercial` on the same
+host and private credential profile. It reserves a process lock, waits until
+00:05 Pacific after a quota-day boundary, and caps each day at 450 question
+attempts. Each item has at most three request attempts; a completed answer,
+including an incorrect answer, is never sampled again. The run ends once all
+3,400 items succeed or reach that failure limit, or after 30 quota days. It
+requires the saved profile to confirm free tier and billing unlinked before
+every batch. Other experiments share the remaining daily allowance.
+
 Generate the chart with `--billing configs/billing.free-tier.json`. API cost is
 zero only while the free-tier quota applies; mobile application-body costs still
 use the dated MTN/Airtel tariffs. The 1,000-question figure is an extrapolation,

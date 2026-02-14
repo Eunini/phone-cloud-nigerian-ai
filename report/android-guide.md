@@ -19,6 +19,10 @@ bash scripts/termux.sh
 mkdir -p models report/runs
 # Put the transferred GGUF into models/model.gguf.
 sha256sum models/model.gguf
+.venv/bin/python -m bench.phone_smoke
+# This records non-identifying hardware metadata, runs 12 actual questions,
+# saves results/server logs under report/runs/, and stops its own model server.
+# After the smoke result has been checked, start the server for the full run:
 .llama-cpp/build/bin/llama-server -m models/model.gguf --alias local \
   --host 127.0.0.1 --port 8080 --ctx-size 2048 --threads 4 --parallel 1 \
   > report/server.log 2>&1 &
@@ -36,20 +40,51 @@ Replace the quoted metadata and hash below with observed values. An optional
 .venv/bin/python -m bench.run --endpoint http://127.0.0.1:8080/v1 --model local \
   --label qwen-1.5b-Q4_K_M --model-revision ACTUAL_GGUF_SHA256 \
   --placement local --device 'ACTUAL phone/chipset/RAM/OS/conditions' \
-  --server-pid "$server_pid" --out report/runs/qwen-q4-repeat1.jsonl
+  --server-pid "$server_pid" --out report/runs/qwen-q4-full.jsonl
+```
+
+Run all 3,400 questions once per model/quantization for accuracy. For repeated
+timing, choose the same 120-item stratified subset before examining outputs:
+
+```bash
+.venv/bin/python -m bench.timing
+for repeat in 1 2 3; do
+  .venv/bin/python -m bench.run --items data/prepared/timing120.jsonl --limit 120 \
+    --endpoint http://127.0.0.1:8080/v1 --model local --label qwen-1.5b-Q4_K_M \
+    --model-revision ACTUAL_GGUF_SHA256 --placement local \
+    --device 'ACTUAL phone/chipset/RAM/OS/conditions' --server-pid "$server_pid" \
+    --replicate "$repeat" --out "report/runs/qwen-q4-timing-$repeat.jsonl"
+done
 kill "$server_pid"
 ```
 
-Repeat all 3,400 questions at least three times per model/quantization, using new
-repeat filenames and identical conditions. Interrupted runs resume successful
-question IDs in the same file; errors remain in the byte-cost accounting. Repeat
-with three candidate models at Q4_K_M and Q8_0, one file at a time if necessary.
+Keep the server running until the repetitions finish, then stop it. Keep identical
+thermal conditions and allow cooling between repetitions. `--limit 120` marks
+these timing samples partial, excluding them from final accuracy decisions.
+Interrupted runs resume successful question IDs in the same file; errors remain
+in the byte-cost accounting. Repeat with three candidate models at Q4_K_M and
+Q8_0, one file at a time if necessary.
 Return the JSONL files, warmup files, server logs, provenance and device notes by
 USB. The evaluator records 50 ms sampled server RSS when Android permits access;
 an unavailable value must be reported as missing, never zero.
 
 The bundle installs only HTTP and process measurement dependencies. Dataset
-preparation, plotting, PyArrow and PyTorch are not required on Android. The NLLB
-translation condition currently requires the separate laptop/PyTorch environment;
-it must not be described as translation performed on this phone. Phone translation
-needs an actual locally running supported translator and separate measured overhead.
+preparation, plotting, PyArrow and PyTorch are not required on Android. For the
+phone translation experiment, the same local GGUF server can translate using:
+
+```bash
+# Add these flags to a separate full accuracy run and separate timing files:
+--translate --translation-endpoint http://127.0.0.1:8080/v1 \
+--translation-model local --translation-revision ACTUAL_TRANSLATOR_GGUF_SHA256
+```
+
+This performs real translation requests on the phone; it never substitutes the
+parallel English reference question. Translation quality is not assumed and
+needs native review. Invalid translation JSON is an error, not a successful
+answer. Record the translator's weights and full translation/answer/back-translation
+time. RSS sampling covers translation, answer generation and presentation. Client and
+server PID peaks are separate measurements, excluding external process trees and
+GPU allocations; their sum is not a measured simultaneous total-memory peak. The alternative
+pinned NLLB translator requires the separate laptop/PyTorch environment and must
+be described as such. Reusing the answering model as translator tests a different
+intervention from adding a dedicated NLLB model; report them separately.

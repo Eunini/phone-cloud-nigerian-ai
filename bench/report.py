@@ -14,6 +14,7 @@ def main():
     p.add_argument("--tariffs", type=Path, default=Path("configs/tariffs.json"))
     p.add_argument("--billing", type=Path, help="JSON indexed by model; required for cloud costs")
     p.add_argument("--threshold", type=float, default=0.6)
+    p.add_argument("--chart-tariff", default="mtn-monthly-2.7gb")
     p.add_argument("--out", type=Path, default=Path("report/results"))
     a = p.parse_args()
     tariffs = json.loads(a.tariffs.read_text())["tariffs"]
@@ -34,6 +35,7 @@ def main():
             "task": task,
             "n": len(rows),
             "successful_requests": len(good),
+            "decision_eligible": not billing.get(model, {}).get("research_only", False),
             "attempts_including_retries": len(attempts),
             "partial": any(r.get("partial", False) for r in rows)
             or len(rows)
@@ -70,7 +72,7 @@ def main():
         bytes_known = all("mb_per_question" in r for r in attempts)
         mb = sum(r.get("mb_per_question", 0) for r in attempts) / len(rows)
         for tariff in tariffs:
-            prices = billing.get(model, {})
+            prices = {k: v for k, v in billing.get(model, {}).items() if k != "research_only"}
             try:
                 token_rows = [r["usage"] for r in attempts if r.get("usage")]
                 usage = (
@@ -118,6 +120,7 @@ def main():
                 r
                 for r in summaries
                 if not r["partial"]
+                and r["decision_eligible"]
                 and (r["language"], r["task"], r["tariff"]) == (language, task, tariff)
             ],
             a.threshold,
@@ -137,30 +140,48 @@ def main():
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
     colors = {"yor": "#2563eb", "hau": "#d97706", "ibo": "#059669", "eng": "#6b7280"}
-    for row in summaries:
-        if row.get("cost_ngn") is None:
-            continue
-        ax.scatter(row["cost_ngn"], row["accuracy"] * 100, c=colors[row["language"]])
-    ax.set(
-        xlabel="NGN per 1,000 questions (marginal)",
-        ylabel="Accuracy (%)",
-        title="Phone or cloud? Measured accuracy and cost",
+    models = sorted({r["model"] for r in summaries})
+    symbols = ["o", "s", "^", "D", "P", "X", "v", "*"]
+    markers = {model: symbols[i % len(symbols)] for i, model in enumerate(models)}
+    for ax, task in zip(axes, ["afrimmlu", "afrixnli", "afrimgsm"], strict=True):
+        for row in summaries:
+            if (
+                row.get("cost_ngn") is None
+                or row["task"] != task
+                or row["tariff"] != a.chart_tariff
+            ):
+                continue
+            ax.scatter(
+                row["cost_ngn"],
+                row["accuracy"] * 100,
+                c=colors[row["language"]],
+                marker=markers[row["model"]],
+                alpha=0.8,
+            )
+        ax.set(title=task, xlabel="NGN / 1,000 questions", ylim=(0, 100))
+        ax.grid(alpha=0.15)
+    axes[0].set_ylabel("Accuracy including request failures (%)")
+    title = (
+        "Partial exploratory benchmarks; full comparison pending"
+        if any(row.get("partial") for row in summaries)
+        else "Phone or cloud? Measured accuracy and cost"
     )
-    if any(row.get("partial") for row in summaries):
-        ax.set_title("Partial exploratory benchmarks; full comparison pending")
+    fig.suptitle(title + "\nTariff: " + a.chart_tariff, fontsize=11)
     from matplotlib.lines import Line2D
 
-    ax.legend(
-        handles=[
-            Line2D(
-                [0], [0], marker="o", color="w", markerfacecolor=color, label=language, markersize=7
-            )
-            for language, color in colors.items()
-        ]
-    )
-    fig.tight_layout()
+    language_handles = [
+        Line2D([0], [0], marker="o", color="w", markerfacecolor=color, label=language, markersize=7)
+        for language, color in colors.items()
+    ]
+    model_handles = [
+        Line2D([0], [0], marker=markers[model], color="#444", linestyle="none", label=model)
+        for model in models
+    ]
+    fig.legend(handles=language_handles, loc="lower center", bbox_to_anchor=(0.5, 0.12), ncol=4)
+    fig.legend(handles=model_handles, loc="lower center", bbox_to_anchor=(0.5, 0.01), fontsize=8)
+    fig.tight_layout(rect=(0, 0.22, 1, 0.9))
     fig.savefig(a.out / "accuracy-cost.png", dpi=180)
 
 

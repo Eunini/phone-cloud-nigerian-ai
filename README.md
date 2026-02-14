@@ -1,7 +1,9 @@
 # Phone or cloud? The cost of AI in Nigerian languages
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
-parallel gold-answer agreement. A 48-question shared-Linux pilot is recorded; physical-device and cloud comparisons are pending.
+parallel gold-answer agreement. The first free-tier commercial batch recorded
+450 attempts: 395 successful responses and 55 HTTP 503 errors. It remains a
+partial study; physical-device and full cloud comparisons are pending.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |
@@ -41,12 +43,19 @@ For Android, create the lightweight bundle with `scripts/android_bundle.py` and
 follow [the physical-device guide](report/android-guide.md). It avoids PyArrow
 and PyTorch installation on Termux, and builds the pinned llama.cpp revision.
 Record phone model, chipset, RAM, OS, battery/charging state, thread count and
-thermal conditions. Log at least three repeated runs before performance claims.
+thermal conditions. Run full accuracy once per model condition and at least
+three timing repeats on the fixed 120-item sample before performance claims.
 
 For Kaggle, see `scripts/kaggle_vllm.sh`; run the evaluator on the notebook host
 against `http://127.0.0.1:8000/v1`. For a commercial free tier, export its key as
 `BENCH_API_KEY`, use the provider's compatible API root and a versioned model ID,
 and record quota eligibility. This repository does not assume any paid credit.
+
+The configured commercial continuation is finite and resumes the same selection
+over successive free-quota days. It makes at most 450 question attempts per day,
+stops after completion or 30 quota days, and never enables billing. See
+[the commercial protocol](report/commercial-run.md). Request failures are retained;
+incorrect completed answers are never retried to improve accuracy.
 
 ```bash
 pip install -e '.[translation]'

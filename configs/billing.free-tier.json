@@ -1,5 +1,9 @@
 {
   "gemini-3.1-flash-lite-preview-free": {
     "free_tier": true
+  },
+  "Qwen2.5-7B-AWQ-Kaggle": {
+    "free_tier": true,
+    "research_only": true
   }
 }

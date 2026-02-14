@@ -5,8 +5,16 @@ parallelism check, strict answer extraction, streaming latency and byte logging,
 memory sampling, three pinned model candidates and download tooling, dated
 operator tariff evidence, cost calculation and decision/report generation.
 
-Pending: the complete six local-model conditions, physical target-device
-measurements, the Kaggle model, a commercial free-tier model, repeated trials,
-translation quality review and final result tables/charts.
+Completed: first commercial free-tier batch, with 450 attempts, 395 successful
+responses and 55 HTTP 503 errors. This is partial and excluded from final
+recommendations. The finite, quota-limited continuation preserves failures.
 
-Kaggle, commercial API and device access were unavailable at initial setup.
+Pending: the complete six local-model conditions, physical target-device
+measurements, completion of the running Kaggle and commercial comparisons,
+three timing repeats, the local-translation condition, translation quality
+review and final result tables/charts.
+
+Kaggle GPU/internet and commercial free-tier access are now verified. The physical
+target is a Samsung Galaxy A16 SM-A165F/DS running Android 16. Its RAM and actual
+inference measurements await the Termux device run. A shared Linux pilot is not
+a phone measurement.

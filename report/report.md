@@ -1,6 +1,6 @@
 # Phone or cloud? The cost of AI in Nigerian languages
 
-Status: data preparation and software validated; substantive benchmark pending.
+Status: audited data and partial commercial measurements; complete comparison pending.
 
 ## Question and data
 
@@ -30,7 +30,14 @@ completion time. OS RSS is not a high-frequency hardware memory trace.
 
 ## Results and chart
 
-No phone/cloud model accuracy results are asserted yet. `bench.report` generates
+The first Gemini Flash Lite free-tier batch recorded 450 requests, including 395
+successful responses and 55 HTTP 503 failures. Of those 450 attempted items, 237
+were answered correctly. This is a shuffled partial sample, not the final
+language/task comparison. Results retain all request failures and retries.
+The fixed 48-question shared-Linux pilot is an integration check; no physical
+phone measurements are available yet.
+
+`bench.report` generates
 `report/results/summary.csv`, `accuracy-cost.png` and `decisions.json` from measured
 run files. The predeclared example accuracy threshold is 60%; revise it only with
 an explicit reason before inspecting final comparisons. If no option reaches it,
@@ -60,6 +67,6 @@ phone or a free API allowance to sustained commercial serving.
 
 ## Conclusion
 
-The datasets, reproducible evaluator and cost model are ready. Device/cloud runs,
+The datasets, reproducible evaluator and cost model are ready. Complete device/cloud runs,
 repeated performance measurements and translation review are needed before an
 accuracy/cost trade-off or final CV percentage can be reported.

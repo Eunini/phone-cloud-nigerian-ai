@@ -190,6 +190,27 @@
   },
   {
     "language": "yor",
+    "task": "afrimgsm",
+    "tariff": "airtel-monthly-3gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrimgsm",
+    "tariff": "mtn-monthly-2.7gb",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
+    "task": "afrimgsm",
+    "tariff": "mtn-payg",
+    "threshold": 0.6,
+    "choice": null
+  },
+  {
+    "language": "yor",
     "task": "afrimmlu",
     "tariff": "airtel-monthly-3gb",
     "threshold": 0.6,
