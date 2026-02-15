@@ -81,6 +81,20 @@ def test_failed_stream_preserves_bytes_without_response_content():
     assert "invalid-json" not in str(caught.value)
 
 
+def test_device_metadata_survives_android_memory_permission_restrictions(monkeypatch):
+    from bench import device
+
+    def denied():
+        raise PermissionError("restricted /proc")
+
+    monkeypatch.setattr(device.psutil, "virtual_memory", denied)
+    monkeypatch.setattr(device.shutil, "which", lambda _: None)
+    result = device.metadata()
+    assert result["memory_total_bytes"] is None
+    assert result["memory_available_bytes_at_setup"] is None
+    assert result["memory_metadata_error"] == "PermissionError"
+
+
 @pytest.mark.parametrize("when", ["before", "after"])
 def test_translation_failure_keeps_only_actual_target_bytes(when):
     from bench.run import measure_question

@@ -41,6 +41,14 @@ including an incorrect answer, is never sampled again. The run ends once all
 requires the saved profile to confirm free tier and billing unlinked before
 every batch. Other experiments share the remaining daily allowance.
 
+In this workspace the finite continuation runs as the dedicated local service
+`afri-research-commercial.service`, under the workspace user. It survives the
+chat's terminal sessions, has a 30-day runtime limit, and reads credentials only
+from the user's private configuration. It does not start AWS or GPU resources.
+The external private log and progress file show whether it is waiting, active
+or finished. A stopped service must be inspected before restarting; there is no
+automatic restart loop for authentication errors.
+
 Generate the chart with `--billing configs/billing.free-tier.json`. API cost is
 zero only while the free-tier quota applies; mobile application-body costs still
 use the dated MTN/Airtel tariffs. The 1,000-question figure is an extrapolation,

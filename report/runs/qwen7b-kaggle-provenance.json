@@ -1,0 +1,19 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct-AWQ",
+  "revision": "b25037543e9394b818fdfca67ab2a00ecc7dd641",
+  "vllm": "0.11.2",
+  "gpu": "Tesla T4",
+  "items_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
+  "latency_scope": "client and vLLM server on the same Kaggle host; excludes phone WAN RTT",
+  "cost_scope": "free research GPU quota; no continuously available public endpoint",
+  "kaggle_kernel": "inioluwaeunice/nigerian-languages-vllm-cloud-benchmark",
+  "kernel_version": 3,
+  "evaluation_source_commit": "284331a",
+  "attempts": 3400,
+  "unique_items": 3400,
+  "successful_responses": 3400,
+  "correct": 1239,
+  "math_length_terminated": 734,
+  "math_total": 1000,
+  "max_output_tokens": 128
+}

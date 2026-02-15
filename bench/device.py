@@ -17,11 +17,20 @@ def metadata():
         "platform": platform.platform(),
         "machine": platform.machine(),
         "logical_cpus": psutil.cpu_count(),
-        "memory_total_bytes": psutil.virtual_memory().total,
-        "memory_available_bytes_at_setup": psutil.virtual_memory().available,
         "disk_free_bytes_at_setup": shutil.disk_usage(".").free,
         "python": platform.python_version(),
     }
+    try:
+        memory = psutil.virtual_memory()
+        result.update(
+            memory_total_bytes=memory.total, memory_available_bytes_at_setup=memory.available
+        )
+    except (OSError, NotImplementedError, psutil.AccessDenied) as error:
+        result.update(
+            memory_total_bytes=None,
+            memory_available_bytes_at_setup=None,
+            memory_metadata_error=type(error).__name__,
+        )
     if shutil.which("getprop"):
         keys = [
             "ro.product.manufacturer",
@@ -31,9 +40,12 @@ def metadata():
             "ro.build.version.release",
             "ro.product.cpu.abilist",
         ]
-        result["android"] = {
-            key: subprocess.check_output(["getprop", key], text=True).strip() for key in keys
-        }
+        result["android"] = {}
+        for key in keys:
+            response = subprocess.run(["getprop", key], capture_output=True, text=True)
+            result["android"][key] = (
+                response.stdout.strip() or None if response.returncode == 0 else None
+            )
     return result
 
 

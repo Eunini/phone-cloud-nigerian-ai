@@ -1,7 +1,8 @@
 # Phone or cloud? The cost of AI in Nigerian languages
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
-parallel gold-answer agreement. The first free-tier commercial batch recorded
+parallel gold-answer agreement. The Kaggle 7B model completed all 3,400 items.
+The first free-tier commercial batch recorded
 450 attempts: 395 successful responses and 55 HTTP 503 errors. It remains a
 partial study; physical-device and full cloud comparisons are pending.
 
@@ -14,6 +15,24 @@ partial study; physical-device and full cloud comparisons are pending.
 Languages: Yoruba (`yor`), Hausa (`hau`), Igbo (`ibo`) and English (`eng`). The math
 set has 250 unique test items; it is never padded to 300 by repetition. Revisions
 and selection hashes are recorded in `report/data-audit.json`.
+
+The completed Qwen2.5-7B AWQ research run used a Kaggle T4 and the fixed
+128-token output budget:
+
+| Language | AfriMMLU (300) | AfriXNLI (300) | AfriMGSM (250) |
+| --- | ---: | ---: | ---: |
+| English | 73.00% | 88.00% | 27.60% |
+| Yoruba | 37.67% | 41.33% | 3.20% |
+| Hausa | 37.00% | 32.33% | 1.60% |
+| Igbo | 38.67% | 37.33% | 0.80% |
+
+Math is strongly limited by this budget: 734 of 1,000 math outputs reached the
+token cap, and only 270 yielded a parseable canonical answer. These scores
+measure answers delivered within the fixed budget; they do not isolate language
+ability. Client/server timing is loopback on Kaggle, excluding phone-network
+latency. Free research GPU quota is excluded from final deployment recommendations.
+
+![Measured accuracy and payload-cost scenarios](report/results/accuracy-cost.png)
 
 ```bash
 python3.12 -m venv .venv
