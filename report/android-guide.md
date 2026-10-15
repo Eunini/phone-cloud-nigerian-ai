@@ -10,6 +10,12 @@ Copy it and one revision-pinned GGUF from `configs/models.json` to the phone by 
 Save that GGUF's SHA256 and provenance alongside the returned results. The transfer
 and one-time model download are separate costs from per-question inference.
 
+For the prepared Android smoke release, download `afri-phone-android-v1.tar.gz`
+and the pinned Qwen Q4 GGUF into Android's Downloads folder. Grant Termux shared
+storage access with `termux-setup-storage`, then extract the bundle into its
+private home. The setup uses Termux's packaged pip to install into a venv created
+without ensurepip; Python and psutil are supplied by Termux packages.
+
 In Termux:
 
 ```bash

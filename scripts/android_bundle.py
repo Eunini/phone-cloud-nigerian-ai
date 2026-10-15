@@ -29,6 +29,11 @@ def main():
         "scripts/termux.sh",
         "configs/models.json",
         "LICENSE",
+        "DATA-NOTICE.md",
+        "licenses/Apache-2.0.txt",
+        "licenses/dataset-cards/afrimmlu.md",
+        "licenses/dataset-cards/afrixnli.md",
+        "licenses/dataset-cards/afrimgsm.md",
         "report/data-audit.json",
         "report/android-guide.md",
     ]

@@ -4,9 +4,10 @@ set -euo pipefail
 # Dataset preparation and PyArrow remain on the development host.
 repo_dir=$(cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$repo_dir"
-pkg install -y python python-psutil clang cmake git make curl
-python -m venv --system-site-packages .venv
-.venv/bin/python -m pip install 'httpx==0.28.1'
+pkg install -y python python-pip python-psutil clang cmake git make curl
+# Termux ships pip separately; do not rely on bundled ensurepip wheels.
+python -m venv --without-pip --system-site-packages .venv
+python -m pip --python "$repo_dir/.venv/bin/python" install 'httpx==0.28.1'
 checkout="$repo_dir/.llama-cpp"
 commit=6050b467c07a95c7b87debd4ddac2f8ba8d9b807
 if [ ! -d "$checkout/.git" ]; then
