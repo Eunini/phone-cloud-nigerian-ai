@@ -134,109 +134,114 @@ def main():
         subprocess.run(command, check=True, timeout=min(21600, remaining))
 
     try:
-        for model_key in identity["models"]:
+        plan = [
+            (model, quant, False)
+            for model in identity["models"]
+            for quant in identity["quantizations"]
+        ] + [("qwen", "Q4_K_M", True)]
+        for model_key, quant, translated_condition in plan:
             model = models[model_key]
-            for quant in identity["quantizations"]:
-                label = f"cpu-server-{model_key}-{quant}"
-                file_name = model["files"][quant]
-                info = get_hf_file_metadata(
-                    hf_hub_url(model["repo"], file_name, revision=model["revision"]), token=False
-                )
-                if info.size is None or len(info.etag or "") != 64:
-                    raise ValueError("Expected published GGUF size and SHA256")
-                # Reuse this study's previously verified Qwen Q4 rather than duplicate it.
-                cached = Path("models") / file_name
-                if cached.is_file() and digest(cached) == info.etag:
-                    weights, owned = cached.absolute(), False
-                else:
-                    cached = a.scratch / file_name
-                    if not cached.exists() and shutil.disk_usage(a.scratch).free < info.size + 268435456:
-                        raise OSError("Insufficient scratch space for the next model")
-                    weights = Path(hf_hub_download(
-                        model["repo"], file_name, revision=model["revision"],
-                        local_dir=a.scratch, token=False,
-                    ))
-                    owned = True
-                if digest(weights) != info.etag or weights.stat().st_size != info.size:
-                    raise ValueError("Downloaded GGUF does not match published SHA256/size")
-                # Never displace another service on the fixed, resumable loopback endpoint.
-                with socket.socket() as port_check:
-                    port_check.bind(("127.0.0.1", a.port))
-                command = [
-                    str(a.server), "-m", str(weights), "--alias", "local",
-                    "--host", "127.0.0.1", "--port", str(a.port),
-                    "--ctx-size", "2048", "--threads", str(a.threads),
-                    "--threads-batch", str(a.threads), "--parallel", "1",
-                    "--n-gpu-layers", "0", "--seed", "2026",
-                ]
-                condition = {
-                    "model": label, "repo": model["repo"], "revision": model["revision"],
-                    "license": model["license"], "sha256": info.etag, "bytes": info.size,
-                    "server_command": command, "load_before": os.getloadavg(), "runs": [],
-                }
-                write_json(a.out / (label + ".provenance.json"), condition)
-                with (a.out / (label + ".server.log")).open("a") as log:
-                    server = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
-                    try:
-                        endpoint = f"http://127.0.0.1:{a.port}"
-                        with httpx.Client(timeout=3) as client:
-                            for _ in range(180):
-                                if server.poll() is not None:
-                                    raise RuntimeError("CPU server exited; inspect retained server log")
-                                try:
-                                    if client.get(endpoint + "/health").status_code == 200:
-                                        break
-                                except httpx.HTTPError:
-                                    pass
-                                time.sleep(1)
-                            else:
-                                raise TimeoutError("CPU model failed to become ready")
-                        runs = [(items, "full", None, False)] + [
-                            (timing, f"timing-{n}", n, False) for n in range(1, 4)
-                        ]
-                        if model_key == "qwen" and quant == "Q4_K_M":
-                            runs += [(items, "translated-full", None, True)]
-                            runs += [(timing, f"translated-timing-{n}", n, True) for n in range(1, 4)]
-                        for data, suffix, repeat, translate in runs:
-                            out = a.out / (label + "-" + suffix + ".jsonl")
-                            args = [
-                                sys.executable, "-m", "bench.run", "--items", str(data),
-                                "--endpoint", endpoint + "/v1", "--model", "local",
-                                "--label", label + ("-translated" if translate else ""),
-                                "--model-revision", info.etag, "--placement", "cloud",
-                                "--device", device, "--server-pid", str(server.pid), "--out", str(out),
-                            ]
-                            if repeat is not None:
-                                args += ["--limit", "120", "--replicate", str(repeat)]
-                            if translate:
-                                args += [
-                                    "--translate", "--translation-endpoint", endpoint + "/v1",
-                                    "--translation-model", "local", "--translation-revision", info.etag,
-                                ]
-                            for _ in range(3):
-                                if audit_run(out, expected[data])["complete"]:
+            label = f"cpu-server-{model_key}-{quant}"
+            condition_label = label + ("-translated" if translated_condition else "")
+            file_name = model["files"][quant]
+            info = get_hf_file_metadata(
+                hf_hub_url(model["repo"], file_name, revision=model["revision"]), token=False
+            )
+            if info.size is None or len(info.etag or "") != 64:
+                raise ValueError("Expected published GGUF size and SHA256")
+            # Reuse this study's previously verified Qwen Q4 rather than duplicate it.
+            cached = Path("models") / file_name
+            if cached.is_file() and digest(cached) == info.etag:
+                weights, owned = cached.absolute(), False
+            else:
+                cached = a.scratch / file_name
+                if not cached.exists() and shutil.disk_usage(a.scratch).free < info.size + 268435456:
+                    raise OSError("Insufficient scratch space for the next model")
+                weights = Path(hf_hub_download(
+                    model["repo"], file_name, revision=model["revision"],
+                    local_dir=a.scratch, token=False,
+                ))
+                owned = True
+            if digest(weights) != info.etag or weights.stat().st_size != info.size:
+                raise ValueError("Downloaded GGUF does not match published SHA256/size")
+            # Never displace another service on the fixed, resumable loopback endpoint.
+            with socket.socket() as port_check:
+                port_check.bind(("127.0.0.1", a.port))
+            command = [
+                str(a.server), "-m", str(weights), "--alias", "local",
+                "--host", "127.0.0.1", "--port", str(a.port),
+                "--ctx-size", "2048", "--threads", str(a.threads),
+                "--threads-batch", str(a.threads), "--parallel", "1",
+                "--n-gpu-layers", "0", "--seed", "2026",
+            ]
+            condition = {
+                "model": condition_label, "repo": model["repo"], "revision": model["revision"],
+                "license": model["license"], "sha256": info.etag, "bytes": info.size,
+                "server_command": command, "load_before": os.getloadavg(), "runs": [],
+            }
+            write_json(a.out / (condition_label + ".provenance.json"), condition)
+            with (a.out / (condition_label + ".server.log")).open("a") as log:
+                server = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
+                try:
+                    endpoint = f"http://127.0.0.1:{a.port}"
+                    with httpx.Client(timeout=3) as client:
+                        for _ in range(180):
+                            if server.poll() is not None:
+                                raise RuntimeError("CPU server exited; inspect retained server log")
+                            try:
+                                if client.get(endpoint + "/health").status_code == 200:
                                     break
-                                if server.poll() is not None:
-                                    raise RuntimeError("CPU model process stopped during evaluation")
-                                run(args)
-                            audit = audit_run(out, expected[data])
-                            condition["runs"].append({"file": out.name, **audit})
-                            write_json(a.out / (label + ".provenance.json"), condition)
-                            if not audit["complete"]:
-                                raise RuntimeError("Incomplete CPU evaluation; retained partial evidence")
-                    finally:
-                        server.terminate()
-                        try:
-                            server.wait(timeout=15)
-                        except subprocess.TimeoutExpired:
-                            server.kill()
-                            server.wait()
-                condition["load_after"] = os.getloadavg()
-                write_json(a.out / (label + ".provenance.json"), condition)
-                progress["conditions"].append(condition)
-                write_json(a.out / "progress.json", progress)
-                if owned:
-                    weights.unlink()  # Only this runner's scratch download, after all recorded runs.
+                            except httpx.HTTPError:
+                                pass
+                            time.sleep(1)
+                        else:
+                            raise TimeoutError("CPU model failed to become ready")
+                    runs = [(items, "full", None, False)] + [
+                        (timing, f"timing-{n}", n, False) for n in range(1, 4)
+                    ]
+                    if translated_condition:
+                        runs = [(items, "translated-full", None, True)]
+                        runs += [(timing, f"translated-timing-{n}", n, True) for n in range(1, 4)]
+                    for data, suffix, repeat, translate in runs:
+                        out = a.out / (label + "-" + suffix + ".jsonl")
+                        args = [
+                            sys.executable, "-m", "bench.run", "--items", str(data),
+                            "--endpoint", endpoint + "/v1", "--model", "local",
+                            "--label", label + ("-translated" if translate else ""),
+                            "--model-revision", info.etag, "--placement", "cloud",
+                            "--device", device, "--server-pid", str(server.pid), "--out", str(out),
+                        ]
+                        if repeat is not None:
+                            args += ["--limit", "120", "--replicate", str(repeat)]
+                        if translate:
+                            args += [
+                                "--translate", "--translation-endpoint", endpoint + "/v1",
+                                "--translation-model", "local", "--translation-revision", info.etag,
+                            ]
+                        for _ in range(3):
+                            if audit_run(out, expected[data])["complete"]:
+                                break
+                            if server.poll() is not None:
+                                raise RuntimeError("CPU model process stopped during evaluation")
+                            run(args)
+                        audit = audit_run(out, expected[data])
+                        condition["runs"].append({"file": out.name, **audit})
+                        write_json(a.out / (condition_label + ".provenance.json"), condition)
+                        if not audit["complete"]:
+                            raise RuntimeError("Incomplete CPU evaluation; retained partial evidence")
+                finally:
+                    server.terminate()
+                    try:
+                        server.wait(timeout=15)
+                    except subprocess.TimeoutExpired:
+                        server.kill()
+                        server.wait()
+            condition["load_after"] = os.getloadavg()
+            write_json(a.out / (condition_label + ".provenance.json"), condition)
+            progress["conditions"].append(condition)
+            write_json(a.out / "progress.json", progress)
+            if owned:
+                weights.unlink()  # Only this runner's scratch download, after all recorded runs.
         progress["status"] = "complete"
     except BaseException as error:
         progress.update(status="stopped", error_type=type(error).__name__)
