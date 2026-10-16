@@ -1,6 +1,11 @@
-# Phone or cloud? The cost of AI in Nigerian languages
+# CPU server or cloud API? The cost of AI in Nigerian languages
 
-Status: complete Kaggle comparison, partial commercial measurements; physical-device comparison pending.
+Status: complete Kaggle comparison, partial commercial measurements; full CPU-server comparison pending.
+
+The owner changed the target on 2026-10-26 to workspace-only experiments. The
+CPU arm uses a shared Linux server, not a consumer device. Phone and laptop runs
+are outside the current scope. The [revised protocol](workspace-protocol.md)
+records the conditions selected before CPU results.
 
 ## Question and data
 
@@ -18,9 +23,9 @@ A–D, one of three NLI labels, or a numeric math answer. Invalid answers count 
 incorrect; never extract an arbitrary number from reasoning. Temperature is zero,
 with the same output budget. Shuffle evaluation order using a fixed seed.
 
-Evaluate three small model families, each at Q4_K_M and Q8_0, a larger model on
+Evaluate two small model families, each at Q4_K_M and Q8_0, a larger model on
 a Kaggle vLLM endpoint and a versioned commercial free-tier endpoint. Record model
-hash, llama.cpp commit, physical device, OS, memory, threads and thermal state.
+hash, llama.cpp commit, server hardware, OS, memory, thread budget and competing load.
 Run a separate local-translation condition, including translation overhead.
 
 Measure streamed first text, first complete whitespace-delimited word, full
@@ -58,8 +63,8 @@ The first Gemini Flash Lite free-tier batch recorded 450 requests, including 395
 successful responses and 55 HTTP 503 failures. Of those 450 attempted items, 237
 were answered correctly. This is a shuffled partial sample, not the final
 language/task comparison. Results retain all request failures and retries.
-The fixed 48-question shared-Linux pilot is an integration check; no physical
-phone measurements are available yet.
+The fixed 48-question shared-Linux pilot is an integration check, excluded from
+the full CPU-server comparison.
 
 `bench.report` generates
 `report/results/summary.csv`, `accuracy-cost.png` and `decisions.json` from measured
@@ -82,6 +87,11 @@ sourced, dated exchange rate. Free-tier scenarios must be labelled and quota
 limited. The current byte measure excludes transport overhead and therefore is
 not exact billed data consumption. Initial model downloads, power, hardware,
 idle server time, unsuccessful calls and bundle expiry need separate accounting.
+The workspace's hosting price is not available. Its compute cost is unknown,
+and CPU-server results cannot be assigned the zero marginal API/data cost used
+for an already-downloaded model on a personally owned offline device. Tariff
+calculations for loopback-hosted endpoints are hypothetical user-access payload
+scenarios, not measurements of a Nigerian network connection.
 
 ## Translation, error analysis and limitations
 
@@ -93,6 +103,6 @@ phone or a free API allowance to sustained commercial serving.
 
 ## Conclusion
 
-The datasets, reproducible evaluator and cost model are ready. Complete device/cloud runs,
+The datasets, reproducible evaluator and cost model are ready. Complete CPU/cloud runs,
 repeated performance measurements and translation review are needed before an
 accuracy/cost trade-off or final CV percentage can be reported.

@@ -1,10 +1,16 @@
-# Phone or cloud? The cost of AI in Nigerian languages
+# CPU server or cloud API? The cost of AI in Nigerian languages
+
+**Scope updated 2026-10-26:** the owner chose to run the study entirely in the
+development workspace. The local-model arm is now a shared Linux CPU-server
+benchmark. No phone or laptop setup is required. The repository name and archived
+Android smoke release are retained for continuity; they do not represent device results.
+See [the CPU-server protocol](report/workspace-protocol.md).
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
 parallel gold-answer agreement. The Kaggle 7B model completed all 3,400 items.
 The first free-tier commercial batch recorded
 450 attempts: 395 successful responses and 55 HTTP 503 errors. It remains a
-partial study; physical-device and full cloud comparisons are pending.
+partial study; full CPU-server and commercial comparisons are pending.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |
@@ -54,11 +60,14 @@ python -m bench.run --endpoint http://127.0.0.1:8080/v1 --model local \
   --server-pid SERVER_PID --out report/runs/qwen-q4.jsonl
 ```
 
-Repeat for the three revision-pinned model candidates in `configs/models.json`,
-at `Q4_K_M` and `Q8_0`. Download one model condition at a time if storage is limited.
-A Linux workstation run must be described as such; it is not an Android-phone run.
+The current CPU protocol selects Qwen2.5-1.5B and SmolLM2-1.7B, each at `Q4_K_M`
+and `Q8_0`, before viewing CPU results. The third configured family remains an
+optional extension. Download one model condition at a time if storage is limited.
+CPU-server runs use `--placement cloud`: an unknown hosting price must remain
+unknown, rather than inheriting the zero marginal data/API cost of offline devices.
 
-For Android, create the lightweight bundle with `scripts/android_bundle.py` and
+The original Android procedure is optional and outside the current study. To
+reproduce it separately, create the lightweight bundle with `scripts/android_bundle.py` and
 follow [the physical-device guide](report/android-guide.md). It avoids PyArrow
 and PyTorch installation on Termux, and builds the pinned llama.cpp revision.
 Record phone model, chipset, RAM, OS, battery/charging state, thread count and

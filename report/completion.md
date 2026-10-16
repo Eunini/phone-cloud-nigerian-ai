@@ -14,12 +14,13 @@ succeeded; 1,239 answers were correct at the fixed 128-token output budget.
 The report explicitly records math truncation (734/1,000 outputs), loopback
 latency scope and research-only GPU cost assumptions.
 
-Pending: the complete six local-model conditions, physical target-device
-measurements, completion of the commercial comparison,
+Pending: the complete four CPU-server model conditions, completion of the commercial comparison,
 three timing repeats, the local-translation condition, translation quality
 review and final result tables/charts.
 
-Kaggle GPU/internet and commercial free-tier access are now verified. The physical
-target is a Samsung Galaxy A16 SM-A165F/DS running Android 16. Its RAM and actual
-inference measurements await the Termux device run. A shared Linux pilot is not
-a phone measurement.
+Scope changed at the owner's request on 2026-10-26: run everything in the
+workspace. Physical phone and laptop measurements are no longer required.
+The primary CPU families are Qwen and SmolLM2 at two quantization levels. A
+predeclared Qwen Q4 self-translation condition and three timing repeats per
+condition are included. Workspace hosting price is unknown; full hosting cost
+and an overall cheapest-server conclusion remain unavailable without price evidence.

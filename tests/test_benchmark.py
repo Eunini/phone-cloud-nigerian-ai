@@ -65,6 +65,31 @@ def test_cost_units_and_missing_prices():
         Endpoint("https://secret@example.com/v1", "test")
 
 
+def test_workspace_completion_requires_every_item_and_preserves_failure_limits(tmp_path):
+    from bench.workspace import audit_run
+
+    out = tmp_path / "run.jsonl"
+    rows = [{"id": "a", "run_id": "same", "status": "ok", "correct": False}]
+    out.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    assert not audit_run(out, {"a", "b"})["complete"]
+    for _ in range(2):
+        rows.append({"id": "b", "run_id": "same", "status": "error"})
+    out.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    assert not audit_run(out, {"a", "b"})["complete"]
+    rows.append({"id": "b", "run_id": "same", "status": "error"})
+    out.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    result = audit_run(out, {"a", "b"})
+    assert result["complete"] and result["successful_items"] == 1
+    assert result["unique_items"] == 2 and result["attempts"] == 4
+    with pytest.raises(ValueError, match="Unexpected question"):
+        audit_run(out, {"a"})
+
+
+def test_cpu_server_with_unknown_hosting_price_never_becomes_a_zero_cost_option():
+    with pytest.raises(ValueError):
+        cost_per_1000(placement="cloud", mb_per_question=0.01, ngn_per_mb=0.74)
+
+
 def test_failed_stream_preserves_bytes_without_response_content():
     content = b"data: invalid-json\n\n"
     endpoint = Endpoint(

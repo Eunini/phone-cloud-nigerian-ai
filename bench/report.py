@@ -166,7 +166,7 @@ def main():
     title = (
         "Partial exploratory benchmarks; full comparison pending"
         if any(row.get("partial") for row in summaries)
-        else "Phone or cloud? Measured accuracy and cost"
+        else "CPU server or cloud API? Measured accuracy and cost"
     )
     fig.suptitle(title + "\nTariff: " + a.chart_tariff, fontsize=11)
     from matplotlib.lines import Line2D
