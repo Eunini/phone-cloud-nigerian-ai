@@ -5,9 +5,10 @@ parallelism check, strict answer extraction, streaming latency and byte logging,
 memory sampling, three pinned model candidates and download tooling, dated
 operator tariff evidence, cost calculation and decision/report generation.
 
-Completed: first commercial free-tier batch, with 450 attempts, 395 successful
-responses and 55 HTTP 503 errors. This is partial and excluded from final
-recommendations. The finite, quota-limited continuation preserves failures.
+Completed: two commercial free-tier batches, with 900 attempts covering 845
+unique items. All 845 now have successful responses (480 correct), including
+retries of the 55 initial HTTP 503 errors. This is partial and excluded from
+final recommendations. The finite, quota-limited continuation preserves failures.
 
 Completed: Kaggle Qwen2.5-7B AWQ evaluation on all 3,400 items. All requests
 succeeded; 1,239 answers were correct at the fixed 128-token output budget.

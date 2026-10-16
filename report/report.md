@@ -63,6 +63,10 @@ The first Gemini Flash Lite free-tier batch recorded 450 requests, including 395
 successful responses and 55 HTTP 503 failures. Of those 450 attempted items, 237
 were answered correctly. This is a shuffled partial sample, not the final
 language/task comparison. Results retain all request failures and retries.
+The second daily batch brings the snapshot to 900 attempts and 845 unique
+items, each now with a successful response; 480 are correct. The 55 initial
+503 failures remain in retry and byte accounting. This is still partial and
+cannot replace the complete per-language/task comparison.
 The fixed 48-question shared-Linux pilot is an integration check, excluded from
 the full CPU-server comparison.
 

@@ -8,9 +8,10 @@ See [the CPU-server protocol](report/workspace-protocol.md).
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
 parallel gold-answer agreement. The Kaggle 7B model completed all 3,400 items.
-The first free-tier commercial batch recorded
-450 attempts: 395 successful responses and 55 HTTP 503 errors. It remains a
-partial study; full CPU-server and commercial comparisons are pending.
+The first two free-tier commercial batches recorded
+900 attempts covering 845 unique items: all 845 now have successful responses,
+including retries of 55 initial HTTP 503 errors. Of those items, 480 were correct.
+It remains a partial study; full CPU-server and commercial comparisons are pending.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |
