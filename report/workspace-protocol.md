@@ -55,6 +55,17 @@ Each worker retains its 24-hour bound, two-core quota and 8-GiB limit. Immutable
 complete-line snapshots permit reporting without editing live JSONL; any
 unflushed tail is excluded and recorded.
 
+After the first condition completed all 3,400 items and three 120-item timing
+repeats, the controller stopped at the next model's port check. TCP TIME_WAIT
+was mistaken for a live listening service. The corrected port guard uses
+SO_REUSEADDR and still rejects an actual listener. A regression check exercises
+both cases. For the already-started study, `scripts/resume_pinned_workspace.py`
+retains the original c75b734 evaluator checkout, verifies its request/scoring
+source bytes against Git, and records the wrapper's hash. Only controller-side
+port checks change; evaluator/model-server children and existing predictions
+remain unchanged. The persisted supervision deadline is retained across this
+explicit repair.
+
 The CPU endpoint is classified `cloud` in the cost evaluator because it is a
 hosted server. Its hosting rate is unknown, so total hosting cost and naira cost
 remain unknown. Report measured service seconds per question and, if useful,

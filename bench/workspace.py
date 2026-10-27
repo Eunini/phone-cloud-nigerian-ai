@@ -166,6 +166,7 @@ def main():
                 raise ValueError("Downloaded GGUF does not match published SHA256/size")
             # Never displace another service on the fixed, resumable loopback endpoint.
             with socket.socket() as port_check:
+                port_check.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 port_check.bind(("127.0.0.1", a.port))
             command = [
                 str(a.server), "-m", str(weights), "--alias", "local",
