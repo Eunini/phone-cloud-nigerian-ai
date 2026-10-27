@@ -1,9 +1,8 @@
-# CPU server or cloud API? The cost of AI in Nigerian languages
+# Nigerian-language inference: CPU and cloud benchmarks
 
-**Scope updated 2026-10-26:** the owner chose to run the study entirely in the
-development workspace. The local-model arm is now a shared Linux CPU-server
-benchmark. No phone or laptop setup is required. The repository name and archived
-Android smoke release are retained for continuity; they do not represent device results.
+**Execution environment:** the local-model arm runs on a shared Linux CPU server.
+No phone or laptop setup is required. The repository name and archived Android
+smoke release are retained for continuity; they do not represent device results.
 See [the CPU-server protocol](report/workspace-protocol.md).
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
