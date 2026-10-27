@@ -26,3 +26,5 @@ runs/private/
 *.wav
 *.mp3
 configs/billing.local.json
+report/runs/gemini-flash-lite-full.progress.json
+report/runs/workspace-cpu/

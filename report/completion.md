@@ -19,6 +19,14 @@ Pending: the complete four CPU-server model conditions, completion of the commer
 three timing repeats, the local-translation condition, translation quality
 review and final result tables/charts.
 
+Update 2026-10-27 UTC: the first full CPU condition completed all 3,400 items
+(744 strictly correct), with three recovered request errors. A frozen, hashed
+snapshot and updated report are published. The commercial snapshot now contains
+1,350 attempts / 1,295 unique items / 1,278 successful responses. Format and
+output-budget failures are reported separately. The exact-choice analysis is
+labelled post-hoc and leaves primary scores unchanged. Other CPU conditions,
+performance repetitions and translation measurements remain pending.
+
 Scope changed at the owner's request on 2026-10-26: run everything in the
 workspace. Physical phone and laptop measurements are no longer required.
 The primary CPU families are Qwen and SmolLM2 at two quantization levels. A

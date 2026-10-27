@@ -7,10 +7,12 @@ See [the CPU-server protocol](report/workspace-protocol.md).
 
 **Current result:** all 3,400 evaluation items have been prepared and checked for
 parallel gold-answer agreement. The Kaggle 7B model completed all 3,400 items.
-The first two free-tier commercial batches recorded
-900 attempts covering 845 unique items: all 845 now have successful responses,
-including retries of 55 initial HTTP 503 errors. Of those items, 480 were correct.
-It remains a partial study; full CPU-server and commercial comparisons are pending.
+The first CPU condition, Qwen2.5-1.5B Q4_K_M, completed all 3,400 items with 744
+strictly correct delivered answers (21.88%). Its low score includes output-format
+failures and the 128-token math budget; it is not a pure language-ability score.
+The commercial snapshot contains 1,350 attempts across 1,295 unique items, with
+1,278 successful responses; it remains partial. Other CPU conditions, timing
+repeats and the translation condition remain pending.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |
@@ -31,6 +33,23 @@ The completed Qwen2.5-7B AWQ research run used a Kaggle T4 and the fixed
 | Yoruba | 37.67% | 41.33% | 3.20% |
 | Hausa | 37.00% | 32.33% | 1.60% |
 | Igbo | 38.67% | 37.33% | 0.80% |
+
+The completed CPU Qwen2.5-1.5B Q4_K_M condition uses the same fixed prompt,
+scorer and token budget:
+
+| Language | AfriMMLU (300) | AfriXNLI (300) | AfriMGSM (250) |
+| --- | ---: | ---: | ---: |
+| English | 13.67% | 65.00% | 0.80% |
+| Yoruba | 16.33% | 36.33% | 0.00% |
+| Hausa | 24.67% | 35.67% | 0.40% |
+| Igbo | 22.00% | 33.33% | 0.00% |
+
+Only 105/300 English knowledge answers followed the strict output format;
+230/250 English math outputs reached the token cap. A labelled post-hoc
+exact-choice diagnostic recovers English knowledge accuracy to 48.00% when the
+output exactly repeats one answer option. Primary scores remain unchanged.
+See [the report](report/report.md) and immutable [result inputs](report/result-inputs.json).
+Workspace hosting cost remains unknown.
 
 Math is strongly limited by this budget: 734 of 1,000 math outputs reached the
 token cap, and only 270 yielded a parseable canonical answer. These scores

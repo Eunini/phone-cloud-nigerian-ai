@@ -23,6 +23,8 @@ def main():
     for path in a.runs:
         for line in path.read_text().splitlines():
             row = json.loads(line)
+            if row.get("replicate") is not None:
+                continue  # Timing repetitions are not additional accuracy experiments.
             groups[(row["model"], row["run_id"], row["language"], row["task"])].append(row)
     summaries = []
     for (model, run, language, task), attempts in groups.items():
@@ -34,6 +36,13 @@ def main():
             "language": language,
             "task": task,
             "n": len(rows),
+            "expected_items": max(
+                r.get(
+                    "expected_group_items",
+                    {"afrimmlu": 300, "afrixnli": 300, "afrimgsm": 250}[task],
+                )
+                for r in rows
+            ),
             "successful_requests": len(good),
             "decision_eligible": not billing.get(model, {}).get("research_only", False),
             "attempts_including_retries": len(attempts),
@@ -52,6 +61,13 @@ def main():
                 sum(r.get("correct", False) for r in good) / len(good) if good else None
             ),
             "median_latency_seconds": statistics.median(r["end_to_end_seconds"] for r in rows),
+            "parseable_answers": sum(r.get("prediction") is not None for r in good),
+            "length_limited_outputs": sum(
+                r.get("finish_reason") in {"length", "MAX_TOKENS"} for r in good
+            ),
+            "observed_attempt_service_seconds_per_1000_questions": 1000
+            * sum(r["end_to_end_seconds"] for r in attempts)
+            / len(rows),
         }
         if not good:
             summaries.append({**summary, "tariff": None, "cost_ngn": None})
@@ -60,6 +76,7 @@ def main():
             "time_to_first_text_seconds",
             "time_to_first_word_seconds",
             "words_per_second",
+            "decode_words_per_second",
         ]:
             values = [r[field] for r in good if r.get(field) is not None]
             summary["median_" + field] = statistics.median(values) if values else None
@@ -69,6 +86,12 @@ def main():
             if r.get("peak_server_rss_bytes_sampled") is not None
         ]
         summary["peak_server_rss_bytes_sampled"] = max(memory) if memory else None
+        client_memory = [
+            r["peak_client_rss_bytes_sampled"]
+            for r in good
+            if r.get("peak_client_rss_bytes_sampled") is not None
+        ]
+        summary["peak_client_rss_bytes_sampled"] = max(client_memory) if client_memory else None
         bytes_known = all("mb_per_question" in r for r in attempts)
         mb = sum(r.get("mb_per_question", 0) for r in attempts) / len(rows)
         for tariff in tariffs:

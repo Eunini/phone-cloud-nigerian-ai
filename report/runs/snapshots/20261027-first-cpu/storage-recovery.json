@@ -1,0 +1,9 @@
+{
+  "checked_at": "2026-10-26T19:11:24.337427+00:00",
+  "reason": "CPU run stopped when shared filesystem temporarily exhausted free space; current free space checked before resuming",
+  "valid_rows_preserved": 1846,
+  "incomplete_final_bytes": 77,
+  "free_bytes_now": 2446172160,
+  "model_prompt_and_scoring_unchanged": true,
+  "incomplete_tail_sha256": "6300739b256a9493d99f67a507acbf10cf9fcd3c0720621aee3f1070faa43131"
+}

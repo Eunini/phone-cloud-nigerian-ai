@@ -45,6 +45,16 @@ this host's operating point. A 24-hour timeout is partial evidence, never a
 completed benchmark. Native review and human judge calibration elsewhere in the
 portfolio remain pending.
 
+`bench.continue_workspace` supervises the pinned study for at most seven days
+and 32 timeout resumptions. Its persisted absolute expiry does not reset when
+restarting the supervisor. Only recorded controller/child timeouts with a new
+timestamp and unchanged worker command can resume. Storage failures, model
+errors and operator termination require diagnosis. Systemd transport errors are
+retried; a monitoring failure never kills the independently bounded worker.
+Each worker retains its 24-hour bound, two-core quota and 8-GiB limit. Immutable
+complete-line snapshots permit reporting without editing live JSONL; any
+unflushed tail is excluded and recorded.
+
 The CPU endpoint is classified `cloud` in the cost evaluator because it is a
 hosted server. Its hosting rate is unknown, so total hosting cost and naira cost
 remain unknown. Report measured service seconds per question and, if useful,

@@ -1,0 +1,41 @@
+{
+  "created_at": "2026-10-27T23:02:22.711669+00:00",
+  "inputs": [
+    "report/runs/qwen7b-kaggle-full.jsonl",
+    "report/runs/snapshots/20261027-first-cpu/cpu-qwen-q4-full.jsonl",
+    "report/runs/snapshots/20261027-first-cpu/gemini-free-partial.jsonl"
+  ],
+  "billing": "configs/billing.free-tier.json",
+  "accuracy_threshold": 0.6,
+  "snapshots": [
+    {
+      "created_at": "2026-10-27T23:02:22.508501+00:00",
+      "source": "report/runs/workspace-cpu/cpu-server-qwen-Q4_K_M-full.jsonl",
+      "snapshot": "report/runs/snapshots/20261027-first-cpu/cpu-qwen-q4-full.jsonl",
+      "source_bytes_observed": 7599416,
+      "snapshot_bytes": 7599416,
+      "unflushed_tail_bytes_excluded": 0,
+      "source_sha256_at_read": "567a3bb4b2b17d7612be7dc61bf73891c192af105692fbbe6c25b737916004cf",
+      "snapshot_sha256": "567a3bb4b2b17d7612be7dc61bf73891c192af105692fbbe6c25b737916004cf",
+      "records": 3403,
+      "unique_items": 3400,
+      "successful_unique_items": 3400,
+      "scope": "Completed JSONL prefix only; source file is never altered"
+    },
+    {
+      "created_at": "2026-10-27T23:02:22.678179+00:00",
+      "source": "report/runs/gemini-flash-lite-full.jsonl",
+      "snapshot": "report/runs/snapshots/20261027-first-cpu/gemini-free-partial.jsonl",
+      "source_bytes_observed": 2425646,
+      "snapshot_bytes": 2425646,
+      "unflushed_tail_bytes_excluded": 0,
+      "source_sha256_at_read": "2cef67bc7ea54ac2215bb40df2d959c02489e117d32b8061dcf3912db8bbe692",
+      "snapshot_sha256": "2cef67bc7ea54ac2215bb40df2d959c02489e117d32b8061dcf3912db8bbe692",
+      "records": 1350,
+      "unique_items": 1295,
+      "successful_unique_items": 1278,
+      "scope": "Completed JSONL prefix only; source file is never altered"
+    }
+  ],
+  "excluded": "Timing repetitions, warmups and the 48-item integration pilot are excluded from these main-study summaries"
+}

@@ -1,6 +1,6 @@
 # CPU server or cloud API? The cost of AI in Nigerian languages
 
-Status: complete Kaggle comparison, partial commercial measurements; full CPU-server comparison pending.
+Status: Kaggle and first CPU condition complete; other CPU conditions and commercial comparison pending.
 
 The owner changed the target on 2026-10-26 to workspace-only experiments. The
 CPU arm uses a shared Linux server, not a consumer device. Phone and laptop runs
@@ -70,11 +70,57 @@ cannot replace the complete per-language/task comparison.
 The fixed 48-question shared-Linux pilot is an integration check, excluded from
 the full CPU-server comparison.
 
+The latest immutable snapshot contains 1,350 commercial attempts across
+1,295 unique items, with 1,278 successful responses. Seventeen attempted items
+still need request-error retries; all attempts remain in payload accounting.
+These partial results do not qualify for final recommendations.
+
+### First full CPU condition
+
+Qwen2.5-1.5B Q4_K_M completed all 3,400 items: 744 strictly correct responses
+(21.88%), with three request errors retained and subsequently recovered. The
+source remains pinned to `c75b734`, with two CPU threads and the original data.
+
+| Language | AfriMMLU (300) | AfriXNLI (300) | AfriMGSM (250) |
+| --- | ---: | ---: | ---: |
+| English | 13.67% | 65.00% | 0.80% |
+| Yoruba | 16.33% | 36.33% | 0.00% |
+| Hausa | 24.67% | 35.67% | 0.40% |
+| Igbo | 22.00% | 33.33% | 0.00% |
+
+These are strict answer-delivery rates. Only 105/300 English knowledge outputs
+were parseable; many others returned an option letter plus its text instead of
+the requested canonical answer. An explicitly post-hoc diagnostic accepts only
+an exact option string, optionally prefixed by its matching letter. It recovers
+103 additional correct English knowledge outputs, yielding 48.00%. The same
+diagnostic gives 24.33%, 27.67% and 26.67% for Yoruba, Hausa and Igbo knowledge
+questions respectively. It makes no new requests, does not extract arbitrary
+letters from explanations and does not replace the primary scores. This
+separates some formatting failures from content errors, rather than supplying
+an independent confirmatory result.
+
+Math hit the output limit on 837/1,000 CPU requests, including 230/250 English
+requests. Only 63/1,000 math outputs were parseable. These strict scores do not
+isolate mathematical or language competence.
+
+Accuracy snapshots preserve successful responses without rerunning incorrect
+answers. Timing repetitions and warmups are excluded from main accuracy reports.
+The active run had a documented storage interruption and later monitoring pause;
+it is not an uninterrupted timing session. Three fixed-sample timing repeats
+remain necessary. `result-inputs.json` records exact files and snapshot hashes;
+never combine a live file and its snapshot as independent attempts.
+
 `bench.report` generates
 `report/results/summary.csv`, `accuracy-cost.png` and `decisions.json` from measured
 run files. The predeclared example accuracy threshold is 60%; revise it only with
 an explicit reason before inspecting final comparisons. If no option reaches it,
 the decision table reports no eligible option.
+
+Reproduce this snapshot with the paths in `report/result-inputs.json` and
+`--billing configs/billing.free-tier.json`. Reports include parseable answers,
+length-limited outputs, client/server RSS and observed attempt service seconds
+per 1,000 questions. Service time excludes controller downtime, warmups, idle
+provisioning and commercial rate-limit waits.
 
 ## Cost
 
