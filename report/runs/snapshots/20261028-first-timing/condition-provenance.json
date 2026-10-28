@@ -1,0 +1,71 @@
+{
+  "model": "cpu-server-qwen-Q4_K_M",
+  "repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+  "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+  "license": "apache-2.0",
+  "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "bytes": 1117320736,
+  "server_command": [
+    "/home/kamicode/aps/alma/output/african-language-research/tools/llama-workspace/build/bin/llama-server",
+    "-m",
+    "/home/kamicode/.local/state/afri-research/workspace-cpu-source/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "--alias",
+    "local",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "18991",
+    "--ctx-size",
+    "2048",
+    "--threads",
+    "2",
+    "--threads-batch",
+    "2",
+    "--parallel",
+    "1",
+    "--n-gpu-layers",
+    "0",
+    "--seed",
+    "2026"
+  ],
+  "load_before": [
+    3.8671875,
+    3.90380859375,
+    4.25634765625
+  ],
+  "runs": [
+    {
+      "file": "cpu-server-qwen-Q4_K_M-full.jsonl",
+      "complete": true,
+      "unique_items": 3400,
+      "successful_items": 3400,
+      "attempts": 3403
+    },
+    {
+      "file": "cpu-server-qwen-Q4_K_M-timing-1.jsonl",
+      "complete": true,
+      "unique_items": 120,
+      "successful_items": 120,
+      "attempts": 120
+    },
+    {
+      "file": "cpu-server-qwen-Q4_K_M-timing-2.jsonl",
+      "complete": true,
+      "unique_items": 120,
+      "successful_items": 120,
+      "attempts": 120
+    },
+    {
+      "file": "cpu-server-qwen-Q4_K_M-timing-3.jsonl",
+      "complete": true,
+      "unique_items": 120,
+      "successful_items": 120,
+      "attempts": 120
+    }
+  ],
+  "load_after": [
+    3.79736328125,
+    3.888671875,
+    4.24951171875
+  ]
+}

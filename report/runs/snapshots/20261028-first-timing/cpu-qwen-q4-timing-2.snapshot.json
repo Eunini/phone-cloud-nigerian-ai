@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-10-28T00:29:49.734799+00:00",
+  "source": "report/runs/workspace-cpu/cpu-server-qwen-Q4_K_M-timing-2.jsonl",
+  "snapshot": "report/runs/snapshots/20261028-first-timing/cpu-qwen-q4-timing-2.jsonl",
+  "source_bytes_observed": 271878,
+  "snapshot_bytes": 271878,
+  "unflushed_tail_bytes_excluded": 0,
+  "source_sha256_at_read": "b49e4052409f664d8d3d3002eda43a4e667f1563129b1ce908c325ad668260e2",
+  "snapshot_sha256": "b49e4052409f664d8d3d3002eda43a4e667f1563129b1ce908c325ad668260e2",
+  "records": 120,
+  "unique_items": 120,
+  "successful_unique_items": 120,
+  "scope": "Completed JSONL prefix only; source file is never altered"
+}

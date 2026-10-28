@@ -106,9 +106,47 @@ isolate mathematical or language competence.
 Accuracy snapshots preserve successful responses without rerunning incorrect
 answers. Timing repetitions and warmups are excluded from main accuracy reports.
 The active run had a documented storage interruption and later monitoring pause;
-it is not an uninterrupted timing session. Three fixed-sample timing repeats
-remain necessary. `result-inputs.json` records exact files and snapshot hashes;
+it is not an uninterrupted full-accuracy timing session. All three fixed-sample
+Qwen Q4 timing repeats are now complete. `result-inputs.json` records full-accuracy
+files and snapshot hashes;
 never combine a live file and its snapshot as independent attempts.
+
+### Repeated CPU performance sample
+
+Three consecutive repetitions of the preselected 120-item sample completed
+without request errors: 360 observations of 120 questions, ten distinct questions
+per language/task. They ran between 2026-10-27 22:56:38 and 23:38:16 UTC, on the
+same two-thread persistent model server. These are a separate performance sample.
+
+| Observed quantity | All three repeats |
+| --- | ---: |
+| Median end-to-end response | 4.12 s |
+| Sample p95 end-to-end response | 18.67 s |
+| Median time to first complete word | 1.91 s |
+| Sample p95 time to first complete word | 7.12 s |
+| Median decoded words/s, where defined | 3.29 (343 observations) |
+| Maximum sampled model-process RSS | 3.00 GiB |
+| Maximum sampled client-process RSS | 31.96 MiB |
+| Questions with different raw text across repeats | 41 / 120 |
+
+The fixed seed and greedy decoding did not produce identical text on every
+repeat. No answer was selected or retried to improve main-study accuracy.
+Repeated sample order and a persistent prompt cache can affect timing; shared
+CPU contention is uncontrolled. End-to-end response time excludes model loading,
+warmup, pauses between requests and controller downtime. RSS sampling every
+50 ms can miss short peaks and excludes other processes. A p95 interpolated over
+this sample is not a population confidence bound or a production SLA.
+
+[JSON](results/cpu-qwen-q4-performance.json) and
+[CSV](results/cpu-qwen-q4-performance.csv) retain all twelve language/task groups,
+the 120-item selection hash and immutable input hashes. Reproduce with:
+
+```bash
+python -m bench.performance \
+  report/runs/snapshots/20261028-first-timing/cpu-qwen-q4-timing-{1,2,3}.jsonl \
+  --items data/prepared/timing120.jsonl \
+  --out report/results/cpu-qwen-q4-performance
+```
 
 `bench.report` generates
 `report/results/summary.csv`, `accuracy-cost.png` and `decisions.json` from measured

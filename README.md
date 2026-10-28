@@ -11,8 +11,9 @@ The first CPU condition, Qwen2.5-1.5B Q4_K_M, completed all 3,400 items with 744
 strictly correct delivered answers (21.88%). Its low score includes output-format
 failures and the 128-token math budget; it is not a pure language-ability score.
 The commercial snapshot contains 1,350 attempts across 1,295 unique items, with
-1,278 successful responses; it remains partial. Other CPU conditions, timing
-repeats and the translation condition remain pending.
+1,278 successful responses; it remains partial. The first CPU condition also
+completed three 120-item timing repeats. Other CPU conditions and the translation
+condition remain pending.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |
@@ -50,6 +51,16 @@ exact-choice diagnostic recovers English knowledge accuracy to 48.00% when the
 output exactly repeats one answer option. Primary scores remain unchanged.
 See [the report](report/report.md) and immutable [result inputs](report/result-inputs.json).
 Workspace hosting cost remains unknown.
+
+The three Qwen Q4 timing repeats contain 360 successful observations of the same
+120 preselected questions. Median response time was **4.12 s**, sample p95
+**18.67 s**, and median first complete word **1.91 s**. Sampled model-process RSS
+peaked at **3.00 GiB**. The persistent server and prompt cache can favour later
+repeats; this shared-host, loopback result is not a phone or production latency
+claim. Raw text differed across repeats for 41/120 questions despite a fixed seed
+and greedy decoding. These repeated observations never enter main accuracy.
+See [the separate performance summary](report/results/cpu-qwen-q4-performance.json)
+for language/task groups, hashes and limitations.
 
 Math is strongly limited by this budget: 734 of 1,000 math outputs reached the
 token cap, and only 270 yielded a parseable canonical answer. These scores

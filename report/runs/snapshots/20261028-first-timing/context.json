@@ -1,0 +1,10 @@
+{
+  "evaluation_source_commit": "c75b734e48defc6f19cc0c2d32bd8a944f6b0595",
+  "first_timestamp_utc": "2026-10-27T22:56:38.254652+00:00",
+  "last_timestamp_utc": "2026-10-27T23:38:15.966439+00:00",
+  "sample_sha256": "d6c750ecd650a86e27959097465506dcf216d389f18985c7eab5ef5c0d0dc0bf",
+  "condition_provenance_note": "Copied after controller port-check repair and completeness recheck. Model hash/command and completed-run records describe this condition; load_before/load_after describe the later recheck, not the timing session.",
+  "raw_integrity": "All three timing-file hashes match the private pre-repair receipt; no model response or timing observation changed.",
+  "performance_summary": "report/results/cpu-qwen-q4-performance.json",
+  "accuracy_scope": "Excluded from report/result-inputs.json; repeated questions do not increase main-study sample size."
+}
