@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-10-31T23:38:58.901828+00:00",
+  "source": "/home/kamicode/aps/alma/output/african-language-research/repos/phone-cloud-nigerian-ai/report/runs/workspace-cpu/cpu-server-qwen-Q8_0-timing-3.jsonl",
+  "snapshot": "/home/kamicode/aps/alma/output/african-language-research/repos/phone-cloud-nigerian-ai/report/runs/snapshots/20261101-qwen-q8/cpu-qwen-q8-timing-3.jsonl",
+  "source_bytes_observed": 271509,
+  "snapshot_bytes": 271509,
+  "unflushed_tail_bytes_excluded": 0,
+  "source_sha256_at_read": "76a672eb13417946041ff93a04f1779eddfb701293c49416c3fd894e7d9d7939",
+  "snapshot_sha256": "76a672eb13417946041ff93a04f1779eddfb701293c49416c3fd894e7d9d7939",
+  "records": 120,
+  "unique_items": 120,
+  "successful_unique_items": 120,
+  "scope": "Completed JSONL prefix only; source file is never altered"
+}

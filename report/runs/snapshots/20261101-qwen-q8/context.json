@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-10-31T23:38:59.096908+00:00",
+  "qwen_q8": "Full 3400-item accuracy and three 120-item timing repeats completed before the SmolLM OOM",
+  "timing_retries": "Repeat 2 retains two failed attempts, followed by successful completions; no successful incorrect answer was retried",
+  "frozen_evaluation_source": "c75b734e48defc6f19cc0c2d32bd8a944f6b0595",
+  "recovery": {
+    "cause": "systemd Result=oom-kill under 8-GiB MemoryMax; last sampled SmolLM server RSS 8445612032 bytes",
+    "contributing_configuration": "Pinned llama.cpp default prompt-cache budget is 8192 MiB, before model/KV/runtime allocations; no cache setting changed",
+    "previous_memory_max_bytes": 8589934592,
+    "new_memory_max_bytes": 12884901888,
+    "cpu_threads": 2,
+    "new_cloud_resources": false,
+    "prediction_policy": "Append/resume missing or request-failed items only; preserve successful incorrect answers; no old lines rewritten",
+    "performance_scope": "Shared-host memory limit increased; cold restart and interruptions must be disclosed; completed timing files remain separate unchanged observations",
+    "supervisor_absolute_expiry": "2026-11-03T23:11:32.881153+00:00"
+  },
+  "scope": "Shared-host CPU. Historical Qwen timing observations precede the resource-limit change; new SmolLM runs use the recorded raised limit. Hosting price remains unknown."
+}

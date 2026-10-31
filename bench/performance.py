@@ -33,23 +33,28 @@ def summarize(paths, items):
         raise ValueError("Use the predeclared 120 distinct items, ten per language/task")
     if len(paths) != 3:
         raise ValueError("Require all three repetitions")
-    rows, inputs, run_ids, signatures = [], [], set(), set()
+    rows, attempts, inputs, run_ids, signatures = [], [], [], set(), set()
     for repetition, path in enumerate(paths, 1):
         raw = Path(path).read_bytes()
         if not raw.endswith(b"\n"):
             raise ValueError("Timing inputs must have complete lines")
         records = [json.loads(line) for line in raw.splitlines()]
-        if len(records) != 120 or {r["id"] for r in records} != set(expected):
-            raise ValueError("Each repetition must contain the same 120 items exactly once")
+        if len(records) < 120 or {r["id"] for r in records} != set(expected):
+            raise ValueError("Each repetition must contain the same 120 items")
         ids = {r["run_id"] for r in records}
         if len(ids) != 1 or ids & run_ids:
             raise ValueError("Repetitions need distinct, unmixed run identities")
         run_ids.update(ids)
+        per_item = defaultdict(list)
         for row in records:
             if (row["language"], row["task"]) != expected[row["id"]]:
                 raise ValueError("Timing language/task disagrees with the selected item")
-            if row["replicate"] != repetition or row["status"] != "ok" or row["translate"]:
-                raise ValueError("Require successful, untranslated repetitions in order")
+            if (
+                row["replicate"] != repetition
+                or row["status"] not in {"ok", "error"}
+                or row["translate"]
+            ):
+                raise ValueError("Require untranslated repetitions with recorded request statuses")
             signatures.add(
                 tuple(
                     row[key]
@@ -62,6 +67,12 @@ def summarize(paths, items):
                     )
                 )
             )
+            per_item[row["id"]].append(row)
+            if row["status"] == "error":
+                elapsed = row.get("end_to_end_seconds")
+                if not isinstance(elapsed, (int, float)) or not math.isfinite(elapsed) or elapsed < 0:
+                    raise ValueError("Missing failed-attempt duration")
+                continue
             for key in (
                 "end_to_end_seconds",
                 "latency_seconds",
@@ -78,12 +89,22 @@ def summarize(paths, items):
             rate = row.get("decode_words_per_second")
             if rate is not None and (not math.isfinite(rate) or rate <= 0):
                 raise ValueError("Invalid decode rate")
-        rows.extend(records)
+        for history in per_item.values():
+            if (
+                len(history) > 3
+                or sum(r["status"] == "ok" for r in history) != 1
+                or history[-1]["status"] != "ok"
+            ):
+                raise ValueError("Require one final success per item; never choose among successes")
+        rows.extend(history[-1] for history in per_item.values())
+        attempts.extend(records)
         inputs.append(
             {
                 "path": str(path),
                 "sha256": hashlib.sha256(raw).hexdigest(),
                 "records": len(records),
+                "successful_items": len(per_item),
+                "request_errors": sum(r["status"] == "error" for r in records),
                 "run_id": next(iter(ids)),
             }
         )
@@ -98,6 +119,12 @@ def summarize(paths, items):
     for (language, task), records in sorted(
         grouped.items(), key=lambda entry: (entry[0] != ("all", "all"), entry[0])
     ):
+        observed = (
+            attempts
+            if (language, task) == ("all", "all")
+            else [r for r in attempts if (r["language"], r["task"]) == (language, task)]
+        )
+        errors = [r for r in observed if r["status"] == "error"]
         texts = defaultdict(set)
         for row in records:
             texts[row["id"]].add(row["text"])
@@ -113,6 +140,10 @@ def summarize(paths, items):
                 "language": language,
                 "task": task,
                 "requests": len(records),
+                "attempts_including_retries": len(observed),
+                "request_errors": len(errors),
+                "attempt_failure_rate": len(errors) / len(observed),
+                "failed_attempt_seconds": sum(r["end_to_end_seconds"] for r in errors),
                 "distinct_items": len(texts),
                 "repetitions": 3,
                 "median_end_to_end_seconds": statistics.median(latencies),
@@ -143,6 +174,7 @@ def summarize(paths, items):
             "Persistent model server and prompt cache; repeated sample order can benefit from caching",
             "Shared host load is uncontrolled; observations are not a phone, WAN, reserved-core or production SLA measurement",
             "End-to-end time excludes model loading, warmup, inter-request pauses and controller downtime",
+            "Latency quantiles describe the final successful responses; preceding request failures and their observed duration are retained separately, not erased",
             "RSS peaks are sampled every 50 ms, not total host memory; decode rate is undefined for some one-chunk responses",
             "p95 uses linear interpolation over the observed sample; no population confidence bound is claimed",
             "Timing rows never enter the full-set accuracy denominator",

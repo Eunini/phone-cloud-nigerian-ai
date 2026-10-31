@@ -1,5 +1,10 @@
 # Nigerian-language inference: CPU and cloud benchmarks
 
+**November 1 update:** both full Qwen CPU quantizations and their three timing
+repeats are complete. SmolLM resumed after a documented worker-memory correction;
+the predeclared translation condition and quota-limited API comparison remain
+open. [Current measured report](report/report.md) and [snapshot context](report/runs/snapshots/20261101-qwen-q8/context.json).
+
 **Execution environment:** the local-model arm runs on a shared Linux CPU server.
 No phone or laptop setup is required. The repository name and archived Android
 smoke release are retained for continuity; they do not represent device results.

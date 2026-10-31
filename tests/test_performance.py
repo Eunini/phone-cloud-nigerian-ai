@@ -59,3 +59,22 @@ def test_missing_items_or_changed_identity_cannot_be_reported_as_complete(tmp_pa
     paths[1].write_text("\n".join(raw.splitlines()[:-1]) + "\n")
     with pytest.raises(ValueError, match="120 items"):
         summarize(paths, items)
+
+
+def test_recovered_request_errors_remain_visible_without_choosing_answers(tmp_path):
+    items, paths = timing_inputs(tmp_path)
+    records = [json.loads(line) for line in paths[1].read_text().splitlines()]
+    failed = {**records[0], "status": "error", "end_to_end_seconds": 10}
+    paths[1].write_text("".join(json.dumps(r) + "\n" for r in [failed, failed, *records]))
+    result = summarize(paths, items)
+    overall = result["groups"][0]
+    assert overall["requests"] == 360
+    assert overall["attempts_including_retries"] == 362
+    assert overall["request_errors"] == 2
+    assert overall["failed_attempt_seconds"] == 20
+    assert overall["median_end_to_end_seconds"] == 2
+    assert result["inputs"][1]["request_errors"] == 2
+    # A second success cannot be selected just because its timing is preferable.
+    paths[1].write_text("".join(json.dumps(r) + "\n" for r in [*records, records[0]]))
+    with pytest.raises(ValueError, match="never choose"):
+        summarize(paths, items)

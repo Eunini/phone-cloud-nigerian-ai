@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-10-31T23:42:22.765880+00:00",
+  "scanner": "gitleaks 8.30.1, redacted directory scan",
+  "scope": "Explicit owned publication paths only; credentials, model binaries, private reviews, provisioning logs and Terraform state excluded",
+  "candidate_files": 25,
+  "unresolved_findings": 0,
+  "reviewed_false_positives": []
+}

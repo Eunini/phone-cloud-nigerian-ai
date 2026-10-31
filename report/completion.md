@@ -38,3 +38,21 @@ The primary CPU families are Qwen and SmolLM2 at two quantization levels. A
 predeclared Qwen Q4 self-translation condition and three timing repeats per
 condition are included. Workspace hosting price is unknown; full hosting cost
 and an overall cheapest-server conclusion remain unavailable without price evidence.
+
+Update November 1: both Qwen CPU quantizations have full 3,400-item accuracy and
+three completed timing repetitions. Q8 had 873 strict correct answers and two
+recovered full-run request errors; repeat 2 retains two timing request errors.
+The performance summarizer now retains recovered failures explicitly and rejects
+multiple successes per item. New immutable snapshots and summary tables are published.
+
+SmolLM stopped on October 28 after an OOM kill. The pinned server's default
+8-GiB prompt cache plus runtime exceeded the 8-GiB worker limit. Recovery raises
+only the service memory cap, keeps inference/evaluator settings unchanged and
+preserves prior answers/hashes. The finite worker/supervisor resumed; its original
+November 3 deadline is retained. The API snapshot is now 3,150 attempts / 3,065
+items / 3,061 successful latest responses, still incomplete under free-tier quotas.
+
+No Hausa/Pidgin safety-review dependency blocks this benchmark. Full workspace
+hosting cost is still unknown. A final report must retain that unknown value or
+state explicit conditional price scenarios, rather than invent a free CPU price.
+Final analysis/manuscript framing remains separate from completing the raw runs.

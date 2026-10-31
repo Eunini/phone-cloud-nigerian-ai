@@ -1,6 +1,6 @@
 # CPU server or cloud API? The cost of AI in Nigerian languages
 
-Status: Kaggle and first CPU condition complete; other CPU conditions and commercial comparison pending.
+Status: Kaggle and both full Qwen CPU quantizations complete. SmolLM/self-translation are resuming after diagnosed OOM; the free-tier comparison is partial. Updated November 1, 2026.
 
 The owner changed the target on 2026-10-26 to workspace-only experiments. The
 CPU arm uses a shared Linux server, not a consumer device. Phone and laptop runs
@@ -70,10 +70,10 @@ cannot replace the complete per-language/task comparison.
 The fixed 48-question shared-Linux pilot is an integration check, excluded from
 the full CPU-server comparison.
 
-The latest immutable snapshot contains 1,350 commercial attempts across
+The October 27 immutable snapshot contained 1,350 commercial attempts across
 1,295 unique items, with 1,278 successful responses. Seventeen attempted items
 still need request-error retries; all attempts remain in payload accounting.
-These partial results do not qualify for final recommendations.
+These partial results do not qualify for final recommendations. A newer, still partial snapshot is described below.
 
 ### First full CPU condition
 
@@ -159,6 +159,59 @@ Reproduce this snapshot with the paths in `report/result-inputs.json` and
 length-limited outputs, client/server RSS and observed attempt service seconds
 per 1,000 questions. Service time excludes controller downtime, warmups, idle
 provisioning and commercial rate-limit waits.
+
+### Completed Qwen Q8 condition and current continuation
+
+The Qwen2.5-1.5B Q8_0 condition also completed all 3,400 items, with 873 strictly
+correct answers (25.68%). Its 3,402 attempts retain two recovered request errors.
+The same pinned evaluator, fixed 128-token budget, data, two CPU threads and
+answer extraction apply. All three Q8 timing repetitions completed; repeat 2
+includes two additional failed attempts, retained rather than discarded.
+
+| Language | AfriMMLU (300) | AfriXNLI (300) | AfriMGSM (250) |
+| --- | ---: | ---: | ---: |
+| English | 37.67% | 65.00% | 2.00% |
+| Yoruba | 25.00% | 34.67% | 0.40% |
+| Hausa | 31.00% | 34.33% | 0.40% |
+| Igbo | 26.67% | 34.00% | 0.40% |
+
+On the same 120-item timing sample, three Q8 repeats produced 360 final successful
+responses from 362 attempts, with two request errors. Successful response median
+was 5.01 seconds and sample p95
+23.09 seconds; median first-word time was
+0.53 seconds. Maximum sampled server RSS was
+6.86 GiB. Earlier failed attempts added
+0.411 observed service seconds; these are kept separately
+from successful-response quantiles. Model-server RSS includes runtime and prompt
+cache, not just model weights. Unknown shared load and cache history preclude a
+clean isolated quantization speed claim.
+
+[Performance JSON](results/cpu-qwen-q8-performance.json) retains the error counts,
+all groups and immutable input hashes. The summarizer rejects duplicate successes
+instead of choosing a preferred output. Accuracy still excludes timing repeats.
+
+The CPU worker stopped on October 28 during SmolLM Q4: systemd recorded an
+out-of-memory kill under its 8-GiB cap. The pinned llama.cpp default prompt-cache
+budget alone is 8,192 MiB, before model/KV/runtime allocations. The last observed
+SmolLM server RSS was about 8.45 GB. The supervisor correctly stopped for
+operator diagnosis rather than silently replaying the study.
+
+The November 1 recovery increased the worker cap to 12 GiB (11-GiB soft threshold,
+no worker swap), preserving the frozen source, server binary/arguments, two
+threads, prompts, weights, seed, sample and successful predictions. It does not
+change the prompt-cache setting to improve a score or timing. Earlier JSONL
+hashes and condition provenance were preserved. Qwen timing observations precede
+this resource change; SmolLM continuation uses the raised cap. Full accuracy is
+resumable, not an uninterrupted timing experiment. The original finite supervisor
+deadline remains November 3 at 23:11 UTC.
+
+The latest commercial snapshot contains 3,150 attempts, 3,065 distinct items and
+3,061 successful latest responses. It remains partial; daily free-tier request
+budgets are respected and billing remains unlinked. No paid fallback is used.
+SmolLM Q4/Q8 and the predeclared self-translation condition remain unfinished.
+[Snapshot context](runs/snapshots/20261101-qwen-q8/context.json) records the scope;
+`result-inputs.json` selects the new immutable API snapshot instead of pooling it
+with old snapshots or the live file.
 
 ## Cost
 

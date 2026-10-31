@@ -1,0 +1,32 @@
+{
+  "evaluation_source_commit": "c75b734e48defc6f19cc0c2d32bd8a944f6b0595",
+  "llama_cpp_revision": "6050b467c07a95c7b87debd4ddac2f8ba8d9b807",
+  "server_binary_sha256": "eec04b5a3a296d510d9142124cd6a46bb0177994e5afaeb71ffef28fecf1b0b1",
+  "items_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
+  "timing_sha256": "d6c750ecd650a86e27959097465506dcf216d389f18985c7eab5ef5c0d0dc0bf",
+  "threads": 2,
+  "port": 18991,
+  "models": [
+    "qwen",
+    "smollm"
+  ],
+  "quantizations": [
+    "Q4_K_M",
+    "Q8_0"
+  ],
+  "placement": "cloud",
+  "hardware_scope": "shared Linux CPU server; GPU layers zero; no phone/laptop evidence",
+  "billing": "workspace hosting price unknown; full hosting cost must remain unknown",
+  "protocol": "Full 3400-item accuracy, three 120-item timing repeats; Qwen Q4 self-translation condition selected before CPU results",
+  "device": {
+    "recorded_at": "2026-10-26T11:29:14.244093+00:00",
+    "platform": "Linux-5.15.0-198-generic-x86_64-with-glibc2.35",
+    "machine": "x86_64",
+    "logical_cpus": 8,
+    "disk_free_bytes_at_setup": 2862358528,
+    "python": "3.12.14",
+    "memory_total_bytes": 25195454464,
+    "memory_available_bytes_at_setup": 9798774784
+  },
+  "started_at": "2026-10-26T11:29:14.248041+00:00"
+}
