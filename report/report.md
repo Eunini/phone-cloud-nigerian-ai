@@ -1,11 +1,19 @@
 # CPU server or cloud API? The cost of AI in Nigerian languages
 
-Status: Kaggle and both full Qwen CPU quantizations complete. SmolLM/self-translation are resuming after diagnosed OOM; the free-tier comparison is partial. Updated November 1, 2026.
+Status: Kaggle and both full Qwen CPU quantizations complete. The remaining CPU/intervention conditions and free-tier comparison are in progress. Updated November 1, 2026.
 
-The owner changed the target on 2026-10-26 to workspace-only experiments. The
-CPU arm uses a shared Linux server, not a consumer device. Phone and laptop runs
-are outside the current scope. The [revised protocol](workspace-protocol.md)
+I revised the scope on 2026-10-26 to run the experiments in the workspace. The
+CPU arm uses a shared Linux server, rather than a consumer device. I am not
+claiming phone or laptop results. The [revised protocol](workspace-protocol.md)
 records the conditions selected before CPU results.
+
+The November 1 reporting snapshot of the commercial run contains **3,150
+attempts / 3,065 distinct items / 3,061 successful latest responses**. I froze it
+at **2026-10-31 23:38:59 UTC** (November 1 CET). It is partial, and the live run
+may subsequently advance. The README and supervisor brief use these same fixed
+figures. The [snapshot receipt](runs/snapshots/20261101-qwen-q8/gemini-free-partial.snapshot.json)
+records its SHA256 and counts; smaller batches below are historical progress,
+not additional independent experiments.
 
 ## Question and data
 
@@ -63,17 +71,18 @@ The first Gemini Flash Lite free-tier batch recorded 450 requests, including 395
 successful responses and 55 HTTP 503 failures. Of those 450 attempted items, 237
 were answered correctly. This is a shuffled partial sample, not the final
 language/task comparison. Results retain all request failures and retries.
-The second daily batch brings the snapshot to 900 attempts and 845 unique
-items, each now with a successful response; 480 are correct. The 55 initial
-503 failures remain in retry and byte accounting. This is still partial and
-cannot replace the complete per-language/task comparison.
+The second daily batch brought the snapshot to 900 attempts and 845 unique
+items, each then with a successful response; 480 were correct. The 55 initial
+503 failures remain in retry and byte accounting. That was a partial snapshot
+and could not replace the complete per-language/task comparison.
 The fixed 48-question shared-Linux pilot is an integration check, excluded from
 the full CPU-server comparison.
 
 The October 27 immutable snapshot contained 1,350 commercial attempts across
-1,295 unique items, with 1,278 successful responses. Seventeen attempted items
-still need request-error retries; all attempts remain in payload accounting.
-These partial results do not qualify for final recommendations. A newer, still partial snapshot is described below.
+1,295 unique items, with 1,278 successful responses. At that point, 17 attempted
+items still needed request-error retries. Those attempts remain in payload
+accounting. This historical snapshot is superseded for current reporting by the
+November 1 snapshot; it is not pooled with the newer file.
 
 ### First full CPU condition
 
@@ -205,8 +214,9 @@ this resource change; SmolLM continuation uses the raised cap. Full accuracy is
 resumable, not an uninterrupted timing experiment. The original finite supervisor
 deadline remains November 3 at 23:11 UTC.
 
-The latest commercial snapshot contains 3,150 attempts, 3,065 distinct items and
-3,061 successful latest responses. It remains partial; daily free-tier request
+The November 1 commercial reporting snapshot, frozen at 2026-10-31 23:38:59
+UTC, contains 3,150 attempts, 3,065 distinct items and 3,061 successful latest
+responses. It remains partial; daily free-tier request
 budgets are respected and billing remains unlinked. No paid fallback is used.
 SmolLM Q4/Q8 and the predeclared self-translation condition remain unfinished.
 [Snapshot context](runs/snapshots/20261101-qwen-q8/context.json) records the scope;

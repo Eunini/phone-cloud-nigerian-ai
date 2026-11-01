@@ -10,15 +10,21 @@ No phone or laptop setup is required. The repository name and archived Android
 smoke release are retained for continuity; they do not represent device results.
 See [the CPU-server protocol](report/workspace-protocol.md).
 
-**Current result:** all 3,400 evaluation items have been prepared and checked for
-parallel gold-answer agreement. The Kaggle 7B model completed all 3,400 items.
-The first CPU condition, Qwen2.5-1.5B Q4_K_M, completed all 3,400 items with 744
-strictly correct delivered answers (21.88%). Its low score includes output-format
-failures and the 128-token math budget; it is not a pure language-ability score.
-The commercial snapshot contains 1,350 attempts across 1,295 unique items, with
-1,278 successful responses; it remains partial. The first CPU condition also
-completed three 120-item timing repeats. Other CPU conditions and the translation
-condition remain pending.
+**Current evidence — November 1 reporting snapshot:** I prepared and checked
+all 3,400 evaluation items for parallel gold-answer agreement. The Kaggle 7B
+model and both Qwen2.5-1.5B CPU quantizations completed the full set. Q4_K_M
+returned 744 strictly correct answers (21.88%); Q8_0 returned 873 (25.68%). Both
+conditions completed three 120-item timing repeats. These strict scores include
+output-format failures and the 128-token answer budget; they do not isolate
+language ability.
+
+The commercial snapshot contains **3,150 attempts across 3,065 distinct items,
+with 3,061 successful latest responses**. It was frozen at **2026-10-31 23:38:59
+UTC** (November 1 in CET), remains partial, and is the same snapshot used in
+[the report](report/report.md) and supervisor brief. These are fixed reporting
+figures, not live counters. The [snapshot receipt](report/runs/snapshots/20261101-qwen-q8/gemini-free-partial.snapshot.json)
+records the file hash and counts. Remaining SmolLM conditions, the translation
+intervention and completion of the API run are still open.
 
 | Task | Dataset | Items per language | Original test size |
 | --- | --- | ---: | ---: |

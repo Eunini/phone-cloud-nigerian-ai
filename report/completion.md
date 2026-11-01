@@ -1,5 +1,10 @@
 # Completion record
 
+Current reporting snapshot (November 1 CET; frozen 2026-10-31 23:38:59 UTC):
+3,150 commercial attempts / 3,065 distinct items / 3,061 successful latest
+responses, still partial. The README, measured report and supervisor brief use
+this same immutable snapshot. The earlier progress records below are historical.
+
 Completed: exact dataset names/revisions, 3,400-item preparation, gold-label
 parallelism check, strict answer extraction, streaming latency and byte logging,
 memory sampling, three pinned model candidates and download tooling, dated
@@ -21,7 +26,7 @@ review and final result tables/charts.
 
 Update 2026-10-27 UTC: the first full CPU condition completed all 3,400 items
 (744 strictly correct), with three recovered request errors. A frozen, hashed
-snapshot and updated report are published. The commercial snapshot now contains
+snapshot and updated report are published. That October 27 commercial snapshot contained
 1,350 attempts / 1,295 unique items / 1,278 successful responses. Format and
 output-budget failures are reported separately. The exact-choice analysis is
 labelled post-hoc and leaves primary scores unchanged.
@@ -32,8 +37,7 @@ published. The Qwen Q8 full run has resumed after a documented controller-only
 TCP port-check repair; all four pre-repair Q4 run files remain byte-identical.
 Other CPU conditions and translation measurements remain pending.
 
-Scope changed at the owner's request on 2026-10-26: run everything in the
-workspace. Physical phone and laptop measurements are no longer required.
+I revised the scope on 2026-10-26 to run everything in the workspace. Physical phone and laptop measurements are no longer required.
 The primary CPU families are Qwen and SmolLM2 at two quantization levels. A
 predeclared Qwen Q4 self-translation condition and three timing repeats per
 condition are included. Workspace hosting price is unknown; full hosting cost

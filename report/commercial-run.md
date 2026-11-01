@@ -3,13 +3,13 @@
 Use the verified `gemini-3.1-flash-lite-preview` model through Google's OpenAI
 compatible API root `https://generativelanguage.googleapis.com/v1beta/openai`.
 The 2026-10-26 discovery response reports version `3.1-flash-lite-preview-03-2026`.
-The account owner verified Free tier with billing unlinked in AI Studio and
-reported limits of 15 requests/minute, 250,000 tokens/minute and 500 requests/day.
+I verified Free tier with billing unlinked in AI Studio and recorded limits of
+15 requests/minute, 250,000 tokens/minute and 500 requests/day.
 The quota is shared with other calls to this model family. Preview weights may
 change even when the API model ID stays fixed; timestamps are mandatory.
 
-The operator loads the dedicated key from its private external credential file
-into the evaluator environment. Never include it in a shell command, notebook,
+I keep the dedicated key in a private configuration file outside the repository;
+the evaluator loads it into its environment. Never include it in a shell command, notebook,
 result, source file or URL. Use a five-second minimum request interval and at
 most 450 new questions per batch, reserving room for warmup and diagnostics:
 

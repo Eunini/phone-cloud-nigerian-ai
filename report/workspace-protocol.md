@@ -1,8 +1,9 @@
 # Workspace CPU-server protocol
 
-Scope revised at the owner's explicit request on 2026-10-26, before collecting
-the full CPU matrix. The existing private repository name is retained. There
-is no required phone or laptop task, and no physical-device conclusion.
+I revised the scope on 2026-10-26, before collecting the full CPU matrix, to
+run the experiments in the workspace. I retained the repository name for
+continuity. Phone/laptop measurements are outside this study, and I draw no
+physical-device conclusion.
 
 Run Qwen2.5-1.5B-Instruct and SmolLM2-1.7B-Instruct, each at Q4_K_M and Q8_0.
 These two Apache-2.0 families and their GGUF repository revisions were already
@@ -29,7 +30,8 @@ human review; automatic JSON conformance is not a translation-quality score.
 
 The controller is finite (24-hour default, 48-hour maximum), single-instance
 locked, resumable only with matching source/data/binary provenance and bounded
-per-process timeouts. Its local service is limited to two CPU cores and 8 GiB.
+per-process timeouts. The local service initially used a two-core quota and an
+8-GiB memory cap; the dated memory-limit repair below records the later change.
 It stops its own model server after each condition and on handled termination.
 It starts no AWS, Kaggle or paid API resources. Existing quota-limited commercial
 continuation is separate. Run with:
@@ -51,7 +53,8 @@ restarting the supervisor. Only recorded controller/child timeouts with a new
 timestamp and unchanged worker command can resume. Storage failures, model
 errors and operator termination require diagnosis. Systemd transport errors are
 retried; a monitoring failure never kills the independently bounded worker.
-Each worker retains its 24-hour bound, two-core quota and 8-GiB limit. Immutable
+Each worker retains its 24-hour bound and two-core quota. The initial 8-GiB
+limit and later 12-GiB recovery limit are disclosed separately. Immutable
 complete-line snapshots permit reporting without editing live JSONL; any
 unflushed tail is excluded and recorded.
 
@@ -65,6 +68,16 @@ source bytes against Git, and records the wrapper's hash. Only controller-side
 port checks change; evaluator/model-server children and existing predictions
 remain unchanged. The persisted supervision deadline is retained across this
 explicit repair.
+
+On November 1, after diagnosing the SmolLM out-of-memory failure, I raised the
+service memory cap to 12 GiB, with an 11-GiB soft threshold and no worker swap.
+The pinned server's default prompt-cache budget alone is 8,192 MiB, before model,
+KV-cache and runtime allocations. I kept the evaluator, model-server arguments,
+weights, prompts, seed and successful answers unchanged. The completed Qwen timing
+runs precede this change; subsequent SmolLM runs use the revised cap. The original
+supervisor expiry is retained. The [reporting context](runs/snapshots/20261101-qwen-q8/context.json)
+records the interruption and recovery; the change does not turn a shared host
+into a reserved-hardware benchmark.
 
 The CPU endpoint is classified `cloud` in the cost evaluator because it is a
 hosted server. Its hosting rate is unknown, so total hosting cost and naira cost
