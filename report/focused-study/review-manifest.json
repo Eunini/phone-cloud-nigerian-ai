@@ -1,0 +1,32 @@
+{
+  "created_at": "2026-11-02T10:14:49.258156+00:00",
+  "author": "Inioluwa Atanda",
+  "scope": "Three-page exploratory review note and reproducible paired analysis; no fresh confirmation or new model requests",
+  "files": {
+    "report/focused-study/Inioluwa-Quantization-Review-Note-2026-11-02.pdf": "80992e5d21cb81b91b531799eda30761c9e169599eddaa4d4be87981cf2334f9",
+    "report/focused-study/analysis-plan.json": "b5c099a28a1bf184d8b793c0d13d69f4d8377609ef9a4c76bf12dd37f8f6dde2",
+    "report/focused-study/confirmation-plan.json": "241772e77c580b4d33e11f343a1637eeea675839da066032355ac30ec70f6c32",
+    "report/focused-study/paired-analysis.png": "c32366e7de4c0b35e34dc074cd2f3bea8374859a91d619ddef145ff3a9425a83",
+    "report/focused-study/paired-results.csv": "bda6a4922b9288a4537f645165edd060b406e014a9d081878e9472c5b96d0a77",
+    "report/focused-study/protocol.md": "d0b1154267f00e61678fb428c6aac1b2d9bde994b33a64e74ae0134eab22f409",
+    "report/focused-study/provenance.json": "9588aede5a086b475a163fe665f33e29a5e28f8f9c7bf757c9b2e3c5c6f9d8f8",
+    "report/focused-study/results.json": "9739a3f0ed57d52931b01938ac5897a9424275acba392e5c851de35cdc82b7d0",
+    "report/focused-study/results.md": "2bf01c6ec2f79ad1770675b075d0a8cee7b2ae9aae877a333a5d949aecc09a24",
+    "bench/focused_nli.py": "62ec338546abb07963e92a56b1ba614e32079767ada68f8165b01d573973ae55",
+    "bench/focused_review.py": "30a76e9ef8fdcee4a04ca691e006cb421279d882f3f12b540744dc9ad0a504b8",
+    "tests/test_focused_nli.py": "979aed42b9a6ecd20a942a8dacbe6b75e20994d8eff172bf154491dd3c9b707f"
+  },
+  "validation": {
+    "local_tests_passed": 34,
+    "ruff": "passed",
+    "pdf_pages": 3,
+    "all_300_paired_csv_outcomes_reconcile": true,
+    "source_snapshot_hashes_unchanged": true,
+    "unused_complement_disjoint_and_complete": true,
+    "scorer_and_client_match_historical_evaluator": true
+  },
+  "inference_calls": 0,
+  "new_cloud_resources": 0,
+  "fresh_confirmation_executed": false,
+  "source_code_before_revision": "1aa88754ec4fd5788a912bfe852d6187fd1cf9bf"
+}

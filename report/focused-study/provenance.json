@@ -1,0 +1,123 @@
+{
+  "recorded_at": "2026-11-02T10:04:33.108569+00:00",
+  "scope": "Transcribed, hashed evidence from the original ignored runtime receipts; no new model run",
+  "common_runtime": {
+    "evaluation_source_commit": "c75b734e48defc6f19cc0c2d32bd8a944f6b0595",
+    "llama_cpp_revision": "6050b467c07a95c7b87debd4ddac2f8ba8d9b807",
+    "server_binary_sha256": "eec04b5a3a296d510d9142124cd6a46bb0177994e5afaeb71ffef28fecf1b0b1",
+    "items_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
+    "threads": 2,
+    "hardware_scope": "shared Linux CPU server; GPU layers zero; no phone/laptop evidence"
+  },
+  "common_runtime_original_receipt_sha256": "8863343f07dc730bad052ecc052b96c627644fd005f6e356781fc2ebe6510106",
+  "host": {
+    "recorded_at": "2026-10-26T11:29:44.903018+00:00",
+    "cpu": {
+      "Architecture": "x86_64",
+      "CPU(s)": "8",
+      "Vendor ID": "GenuineIntel",
+      "Model name": "Intel Core Processor (Broadwell, no TSX, IBRS)",
+      "Thread(s) per core": "1",
+      "Core(s) per socket": "8",
+      "Socket(s)": "1",
+      "Hypervisor vendor": "KVM",
+      "Virtualization type": "full",
+      "L1d cache": "256 KiB (8 instances)",
+      "L1i cache": "256 KiB (8 instances)",
+      "L2 cache": "32 MiB (8 instances)",
+      "L3 cache": "16 MiB (1 instance)"
+    },
+    "service_limits": {
+      "CPUQuotaPerSecUSec": "2s",
+      "MemoryMax": "8589934592",
+      "Nice": "10"
+    },
+    "scope": "Shared KVM Linux CPU workspace; quota does not reserve physical cores; provider hosting price unknown"
+  },
+  "host_original_receipt_sha256": "9a542f40c8ed1daa25ec0a1e3c673cfa62a42f9fabc9b5f9f70988ef983b24f7",
+  "conditions": {
+    "Q4_K_M": {
+      "original_receipt_sha256": "341dda9fa7a51804c4708d99a801f0c549698bc2d08e1dee53938ebb9ce9560e",
+      "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+      "weights_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+      "file_bytes": 1117320736,
+      "normalised_server_command": [
+        "llama-server",
+        "-m",
+        "<verified GGUF file>",
+        "--alias",
+        "local",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18991",
+        "--ctx-size",
+        "2048",
+        "--threads",
+        "2",
+        "--threads-batch",
+        "2",
+        "--parallel",
+        "1",
+        "--n-gpu-layers",
+        "0",
+        "--seed",
+        "2026"
+      ],
+      "host_load_before": [
+        3.8232421875,
+        4.43994140625,
+        4.69140625
+      ],
+      "host_load_after": [
+        3.7568359375,
+        4.416015625,
+        4.68212890625
+      ]
+    },
+    "Q8_0": {
+      "original_receipt_sha256": "bdfa644b3b74b8e354755c00df1b1625d7fb1c726cd9122a4528c3745309707c",
+      "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+      "weights_sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "file_bytes": 1894532128,
+      "normalised_server_command": [
+        "llama-server",
+        "-m",
+        "<verified GGUF file>",
+        "--alias",
+        "local",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18991",
+        "--ctx-size",
+        "2048",
+        "--threads",
+        "2",
+        "--threads-batch",
+        "2",
+        "--parallel",
+        "1",
+        "--n-gpu-layers",
+        "0",
+        "--seed",
+        "2026"
+      ],
+      "host_load_before": [
+        3.5234375,
+        4.2568359375,
+        4.6162109375
+      ],
+      "host_load_after": [
+        3.5234375,
+        4.2568359375,
+        4.6162109375
+      ]
+    }
+  },
+  "normalised_server_commands_match_except_model_file": true,
+  "origin_limit": "Both GGUF files are pinned to the same official repository revision. The complete upstream unquantized-weight/conversion/calibration chain is not recorded; this is a comparison of released artifacts, not an isolated bit-width experiment.",
+  "execution_order_limit": "Conditions were collected sequentially on different dates on a shared virtual host; order and physical contention were not randomised or controlled."
+}

@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = ["httpx>=0.28,<1", "datasets>=3.6,<4", "huggingface-hub>=0.34,<1", "psutil>=7,<8", "matplotlib>=3.9,<4"]
 
 [project.optional-dependencies]
+review = ["reportlab>=4,<5"]
 translation = ["torch>=2.5,<3", "transformers>=4.45,<5", "sentencepiece>=0.2,<1"]
 dev = ["pytest>=8,<9", "ruff>=0.12,<1"]
 

@@ -1,3 +1,5 @@
+> **Research scope revised on 2 November 2026:** this document retains the broader exploratory inventory and its dated reporting snapshot. The focused research question, matched comparison, paired uncertainty and diagnostic failures are in [the revised study](focused-study/protocol.md) and [results note](focused-study/results.md). Provider and cost comparisons below do not establish a causal language or compression effect.
+
 # CPU server or cloud API? The cost of AI in Nigerian languages
 
 Status: Kaggle and both full Qwen CPU quantizations complete. The remaining CPU/intervention conditions and free-tier comparison are in progress. Updated November 1, 2026.

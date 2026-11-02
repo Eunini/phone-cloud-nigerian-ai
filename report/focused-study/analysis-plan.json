@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-02T10:04:33.108569+00:00",
+  "status": "Exploratory analysis specified after broader results were inspected; not preregistered",
+  "question": "For the released Qwen2.5-1.5B-Instruct GGUF artifacts on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?",
+  "base_model": "Qwen2.5-1.5B-Instruct",
+  "gguf_repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+  "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+  "task": "afrixnli",
+  "languages": [
+    "eng",
+    "yor"
+  ],
+  "expected_parallel_pairs": 300,
+  "data_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
+  "dataset_revision": "e3ca06b30f3e7af2a86f6c8609ea76fee326bc56",
+  "dataset": "masakhane/afrixnli",
+  "conditions": {
+    "Q4_K_M": {
+      "run": "report/runs/snapshots/20261027-first-cpu/cpu-qwen-q4-full.jsonl",
+      "sha256": "567a3bb4b2b17d7612be7dc61bf73891c192af105692fbbe6c25b737916004cf",
+      "model": "cpu-server-qwen-Q4_K_M",
+      "weights_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+      "file_bytes": 1117320736
+    },
+    "Q8_0": {
+      "run": "report/runs/snapshots/20261101-qwen-q8/cpu-qwen-q8-full.jsonl",
+      "sha256": "8f97b2b38805e34e3d6e1db519692c5652a58b099667871ece01364942bc7055",
+      "model": "cpu-server-qwen-Q8_0",
+      "weights_sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "file_bytes": 1894532128
+    }
+  },
+  "provenance": "report/focused-study/provenance.json",
+  "provenance_sha256": "9588aede5a086b475a163fe665f33e29a5e28f8f9c7bf757c9b2e3c5c6f9d8f8",
+  "prompt_version": "fixed-en-instructions-v1",
+  "max_tokens": 128,
+  "scorer_sha256": "2580c76313632fb10f2ee237eb40d4214a9c6be40dd53fcf594710a7c299340a",
+  "inference_client_sha256": "89e20b3b82511390e2b115576f0c115ae2c5cb9ff6e397d6666fb83659a22cef",
+  "bootstrap": {
+    "replicates": 10000,
+    "seed": 20261102,
+    "confidence": 0.95,
+    "unit": "parallel question ID, resampling all four outcomes together",
+    "interval": "nominal percentile, linear interpolation; exploratory and conditional on these recorded runs"
+  },
+  "primary_contrast": "(Yoruba Q4_K_M - Yoruba Q8_0) - (English Q4_K_M - English Q8_0), in percentage points; negative means a greater measured Yoruba loss",
+  "secondary_diagnostics": [
+    "per-language paired accuracy change",
+    "strict answer parsing failures",
+    "request failures and attempts",
+    "token-cap stops and token usage",
+    "label frequencies, confusion matrices and recall",
+    "recorded GGUF file sizes"
+  ],
+  "excluded": [
+    "other tasks",
+    "other languages",
+    "other model families",
+    "GPU and commercial endpoints",
+    "translation intervention",
+    "timing repeats and warmups",
+    "latency, memory, serving-cost and device claims"
+  ],
+  "new_inference_requests": 0,
+  "original_broad_protocol": "report/workspace-protocol.md",
+  "source_commit_before_analysis": "1aa88754ec4fd5788a912bfe852d6187fd1cf9bf"
+}

@@ -1,0 +1,283 @@
+{
+  "status": "Exploratory analysis specified after broader results were inspected; not preregistered",
+  "question": "For the released Qwen2.5-1.5B-Instruct GGUF artifacts on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?",
+  "parallel_questions": 300,
+  "unique_question_language_items": 600,
+  "condition_item_outcomes": 1200,
+  "new_inference_requests": 0,
+  "cells": [
+    {
+      "language": "eng",
+      "quantization": "Q8_0",
+      "n": 300,
+      "correct": 195,
+      "accuracy_percent": 65.0,
+      "attempts": 301,
+      "failed_attempts": 1,
+      "final_request_failures": 0,
+      "unparseable_successes": 0,
+      "output_cap_stops": 0,
+      "accuracy_among_parseable_percent": 65.0,
+      "reported_prompt_token_range": [
+        72,
+        124
+      ],
+      "gold_counts": {
+        "contradiction": 99,
+        "neutral": 102,
+        "entailment": 99
+      },
+      "prediction_counts": {
+        "contradiction": 137,
+        "entailment": 162,
+        "neutral": 1
+      },
+      "confusion_gold_rows_prediction_columns": {
+        "entailment": {
+          "entailment": 98,
+          "neutral": 0,
+          "contradiction": 1,
+          "invalid_or_error": 0
+        },
+        "neutral": {
+          "entailment": 61,
+          "neutral": 1,
+          "contradiction": 40,
+          "invalid_or_error": 0
+        },
+        "contradiction": {
+          "entailment": 3,
+          "neutral": 0,
+          "contradiction": 96,
+          "invalid_or_error": 0
+        }
+      },
+      "class_recall_percent": {
+        "entailment": 98.98989898989899,
+        "neutral": 0.9803921568627451,
+        "contradiction": 96.96969696969697
+      },
+      "observed_majority_label_accuracy_percent": 34.0
+    },
+    {
+      "language": "eng",
+      "quantization": "Q4_K_M",
+      "n": 300,
+      "correct": 195,
+      "accuracy_percent": 65.0,
+      "attempts": 300,
+      "failed_attempts": 0,
+      "final_request_failures": 0,
+      "unparseable_successes": 0,
+      "output_cap_stops": 0,
+      "accuracy_among_parseable_percent": 65.0,
+      "reported_prompt_token_range": [
+        72,
+        124
+      ],
+      "gold_counts": {
+        "contradiction": 99,
+        "neutral": 102,
+        "entailment": 99
+      },
+      "prediction_counts": {
+        "contradiction": 147,
+        "entailment": 148,
+        "neutral": 5
+      },
+      "confusion_gold_rows_prediction_columns": {
+        "entailment": {
+          "entailment": 94,
+          "neutral": 0,
+          "contradiction": 5,
+          "invalid_or_error": 0
+        },
+        "neutral": {
+          "entailment": 51,
+          "neutral": 5,
+          "contradiction": 46,
+          "invalid_or_error": 0
+        },
+        "contradiction": {
+          "entailment": 3,
+          "neutral": 0,
+          "contradiction": 96,
+          "invalid_or_error": 0
+        }
+      },
+      "class_recall_percent": {
+        "entailment": 94.94949494949495,
+        "neutral": 4.901960784313726,
+        "contradiction": 96.96969696969697
+      },
+      "observed_majority_label_accuracy_percent": 34.0
+    },
+    {
+      "language": "yor",
+      "quantization": "Q8_0",
+      "n": 300,
+      "correct": 104,
+      "accuracy_percent": 34.666666666666664,
+      "attempts": 300,
+      "failed_attempts": 0,
+      "final_request_failures": 0,
+      "unparseable_successes": 0,
+      "output_cap_stops": 0,
+      "accuracy_among_parseable_percent": 34.666666666666664,
+      "reported_prompt_token_range": [
+        92,
+        281
+      ],
+      "gold_counts": {
+        "contradiction": 99,
+        "neutral": 102,
+        "entailment": 99
+      },
+      "prediction_counts": {
+        "entailment": 278,
+        "contradiction": 22
+      },
+      "confusion_gold_rows_prediction_columns": {
+        "entailment": {
+          "entailment": 96,
+          "neutral": 0,
+          "contradiction": 3,
+          "invalid_or_error": 0
+        },
+        "neutral": {
+          "entailment": 91,
+          "neutral": 0,
+          "contradiction": 11,
+          "invalid_or_error": 0
+        },
+        "contradiction": {
+          "entailment": 91,
+          "neutral": 0,
+          "contradiction": 8,
+          "invalid_or_error": 0
+        }
+      },
+      "class_recall_percent": {
+        "entailment": 96.96969696969697,
+        "neutral": 0.0,
+        "contradiction": 8.080808080808081
+      },
+      "observed_majority_label_accuracy_percent": 34.0
+    },
+    {
+      "language": "yor",
+      "quantization": "Q4_K_M",
+      "n": 300,
+      "correct": 109,
+      "accuracy_percent": 36.333333333333336,
+      "attempts": 300,
+      "failed_attempts": 0,
+      "final_request_failures": 0,
+      "unparseable_successes": 0,
+      "output_cap_stops": 0,
+      "accuracy_among_parseable_percent": 36.333333333333336,
+      "reported_prompt_token_range": [
+        92,
+        281
+      ],
+      "gold_counts": {
+        "contradiction": 99,
+        "neutral": 102,
+        "entailment": 99
+      },
+      "prediction_counts": {
+        "entailment": 262,
+        "contradiction": 38
+      },
+      "confusion_gold_rows_prediction_columns": {
+        "entailment": {
+          "entailment": 95,
+          "neutral": 0,
+          "contradiction": 4,
+          "invalid_or_error": 0
+        },
+        "neutral": {
+          "entailment": 82,
+          "neutral": 0,
+          "contradiction": 20,
+          "invalid_or_error": 0
+        },
+        "contradiction": {
+          "entailment": 85,
+          "neutral": 0,
+          "contradiction": 14,
+          "invalid_or_error": 0
+        }
+      },
+      "class_recall_percent": {
+        "entailment": 95.95959595959596,
+        "neutral": 0.0,
+        "contradiction": 14.141414141414142
+      },
+      "observed_majority_label_accuracy_percent": 34.0
+    }
+  ],
+  "contrasts": {
+    "eng": {
+      "estimate_pp": 0.0,
+      "ci95_pp": [
+        -1.6666666666666667,
+        2.0
+      ]
+    },
+    "yor": {
+      "estimate_pp": 1.6666666666666667,
+      "ci95_pp": [
+        0.0,
+        3.3333333333333335
+      ]
+    },
+    "interaction": {
+      "estimate_pp": 1.6666666666666667,
+      "ci95_pp": [
+        -0.6666666666666667,
+        4.333333333333333
+      ]
+    }
+  },
+  "paired_correctness_concordance": {
+    "eng": {
+      "both_correct": 191,
+      "q4_only_correct": 4,
+      "q8_only_correct": 4,
+      "both_incorrect": 101
+    },
+    "yor": {
+      "both_correct": 103,
+      "q4_only_correct": 6,
+      "q8_only_correct": 1,
+      "both_incorrect": 190
+    }
+  },
+  "primary_contrast": "(Yoruba Q4_K_M - Yoruba Q8_0) - (English Q4_K_M - English Q8_0), in percentage points; negative means a greater measured Yoruba loss",
+  "bootstrap": {
+    "replicates": 10000,
+    "seed": 20261102,
+    "confidence": 0.95,
+    "unit": "parallel question ID, resampling all four outcomes together",
+    "interval": "nominal percentile, linear interpolation; exploratory and conditional on these recorded runs"
+  },
+  "conditioning": "Intervals resample observed question clusters, not hosts, models, translations or run repetitions. Post-hoc scope selection and execution-order confounding remain.",
+  "input_hashes": {
+    "Q8_0": "8f97b2b38805e34e3d6e1db519692c5652a58b099667871ece01364942bc7055",
+    "Q4_K_M": "567a3bb4b2b17d7612be7dc61bf73891c192af105692fbbe6c25b737916004cf"
+  },
+  "data_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
+  "analysis_code_sha256": "62ec338546abb07963e92a56b1ba614e32079767ada68f8165b01d573973ae55",
+  "run_periods": {
+    "Q8_0": {
+      "first": "2026-10-28T00:05:25.206785+00:00",
+      "last": "2026-10-28T11:48:23.112112+00:00"
+    },
+    "Q4_K_M": {
+      "first": "2026-10-26T11:30:01.262239+00:00",
+      "last": "2026-10-27T22:56:14.576990+00:00"
+    }
+  },
+  "analysis_plan_sha256": "b5c099a28a1bf184d8b793c0d13d69f4d8377609ef9a4c76bf12dd37f8f6dde2"
+}
