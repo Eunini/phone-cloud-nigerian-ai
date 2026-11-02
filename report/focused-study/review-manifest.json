@@ -1,20 +1,21 @@
 {
   "created_at": "2026-11-02T10:14:49.258156+00:00",
   "author": "Inioluwa Atanda",
-  "scope": "Three-page exploratory review note and reproducible paired analysis; no fresh confirmation or new model requests",
+  "scope": "Review note and paired English-Yoruba AfriXNLI analysis using existing answers. The confirmation experiment has not been run.",
   "files": {
-    "report/focused-study/Inioluwa-Quantization-Review-Note-2026-11-02.pdf": "80992e5d21cb81b91b531799eda30761c9e169599eddaa4d4be87981cf2334f9",
-    "report/focused-study/analysis-plan.json": "b5c099a28a1bf184d8b793c0d13d69f4d8377609ef9a4c76bf12dd37f8f6dde2",
-    "report/focused-study/confirmation-plan.json": "241772e77c580b4d33e11f343a1637eeea675839da066032355ac30ec70f6c32",
-    "report/focused-study/paired-analysis.png": "c32366e7de4c0b35e34dc074cd2f3bea8374859a91d619ddef145ff3a9425a83",
+    "report/focused-study/Inioluwa-Quantization-Review-Note-2026-11-02.pdf": "ffa15c84450fdd8ef905ece28a8257b8fa4676efd1609195a1de985226ddf685",
+    "report/focused-study/analysis-plan.json": "329939e389ddb8770334d535343b21a7f85dc199640175f7c8c48a106c1848c5",
+    "report/focused-study/confirmation-plan.json": "6deed47e8ddc5e801c119d21a303c95b7bd5b060a53ac98135965e71c59ee63d",
+    "report/focused-study/paired-analysis.png": "1af023365e30e4ede2737d5dc43fe8fddf56561fc149772caec78002c3305ae2",
     "report/focused-study/paired-results.csv": "bda6a4922b9288a4537f645165edd060b406e014a9d081878e9472c5b96d0a77",
-    "report/focused-study/protocol.md": "d0b1154267f00e61678fb428c6aac1b2d9bde994b33a64e74ae0134eab22f409",
-    "report/focused-study/provenance.json": "9588aede5a086b475a163fe665f33e29a5e28f8f9c7bf757c9b2e3c5c6f9d8f8",
-    "report/focused-study/results.json": "9739a3f0ed57d52931b01938ac5897a9424275acba392e5c851de35cdc82b7d0",
-    "report/focused-study/results.md": "2bf01c6ec2f79ad1770675b075d0a8cee7b2ae9aae877a333a5d949aecc09a24",
-    "bench/focused_nli.py": "62ec338546abb07963e92a56b1ba614e32079767ada68f8165b01d573973ae55",
-    "bench/focused_review.py": "30a76e9ef8fdcee4a04ca691e006cb421279d882f3f12b540744dc9ad0a504b8",
-    "tests/test_focused_nli.py": "979aed42b9a6ecd20a942a8dacbe6b75e20994d8eff172bf154491dd3c9b707f"
+    "report/focused-study/protocol.md": "27b76ceb3ea00cb638664b5d85e7ea94575f255fb35dfa11e25f90dff51182c6",
+    "report/focused-study/provenance.json": "43d51e3b9d0e140da5344b6cf6c8979e9f0d11b45af9b53278936745d92b0ad5",
+    "report/focused-study/results.json": "3dfe57a810e60a5b4c1097012db2040668281a5bad584fbbcdc9e9089b107dec",
+    "report/focused-study/results.md": "c456158039bdf78cbc4700b89b40c24658d35bcb2347b25835b7616ba789ca68",
+    "bench/focused_nli.py": "16a00b85cee2e3ffcdc048de00d52c59f527ed31aff85acac0197113b6aebc60",
+    "bench/focused_review.py": "c0f4edb06f855ff0e3e3c512a8116fa6a33564dfd240488c8ef70a4a9afb6a86",
+    "tests/test_focused_nli.py": "979aed42b9a6ecd20a942a8dacbe6b75e20994d8eff172bf154491dd3c9b707f",
+    "report/focused-study/README.md": "dbae4b6b21407f1e0ad2f7d941fc97cc16d24f7d2b63591580a349b4a886c172"
   },
   "validation": {
     "local_tests_passed": 34,
@@ -23,10 +24,14 @@
     "all_300_paired_csv_outcomes_reconcile": true,
     "source_snapshot_hashes_unchanged": true,
     "unused_complement_disjoint_and_complete": true,
-    "scorer_and_client_match_historical_evaluator": true
+    "scorer_and_client_match_historical_evaluator": true,
+    "scores_and_paired_outcomes_unchanged_by_wording_revision": true,
+    "document_links_checked": true,
+    "plain_prose_punctuation_checked": true
   },
   "inference_calls": 0,
   "new_cloud_resources": 0,
   "fresh_confirmation_executed": false,
-  "source_code_before_revision": "1aa88754ec4fd5788a912bfe852d6187fd1cf9bf"
+  "source_code_before_revision": "1aa88754ec4fd5788a912bfe852d6187fd1cf9bf",
+  "wording_revised_at": "2026-11-02T11:04:29.506006+00:00"
 }

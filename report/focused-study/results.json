@@ -1,6 +1,6 @@
 {
-  "status": "Exploratory analysis specified after broader results were inspected; not preregistered",
-  "question": "For the released Qwen2.5-1.5B-Instruct GGUF artifacts on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?",
+  "status": "Exploratory analysis. I chose this narrower question after reviewing the broader results. It was not preregistered.",
+  "question": "Does the change in AfriXNLI accuracy from Q8_0 to Q4_K_M differ between Yoruba and English for Qwen2.5-1.5B-Instruct?",
   "parallel_questions": 300,
   "unique_question_language_items": 600,
   "condition_item_outcomes": 1200,
@@ -259,16 +259,16 @@
     "replicates": 10000,
     "seed": 20261102,
     "confidence": 0.95,
-    "unit": "parallel question ID, resampling all four outcomes together",
-    "interval": "nominal percentile, linear interpolation; exploratory and conditional on these recorded runs"
+    "unit": "Parallel question ID. Each sampled ID keeps its four outcomes together.",
+    "interval": "95% percentile bootstrap with linear interpolation. The intervals are exploratory and describe the recorded runs."
   },
-  "conditioning": "Intervals resample observed question clusters, not hosts, models, translations or run repetitions. Post-hoc scope selection and execution-order confounding remain.",
+  "conditioning": "The intervals describe question variation in the recorded runs. They do not cover host changes, translation errors or differences between repeated runs. The question was narrowed after results were inspected, and configuration order was not randomised.",
   "input_hashes": {
     "Q8_0": "8f97b2b38805e34e3d6e1db519692c5652a58b099667871ece01364942bc7055",
     "Q4_K_M": "567a3bb4b2b17d7612be7dc61bf73891c192af105692fbbe6c25b737916004cf"
   },
   "data_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
-  "analysis_code_sha256": "62ec338546abb07963e92a56b1ba614e32079767ada68f8165b01d573973ae55",
+  "analysis_code_sha256": "16a00b85cee2e3ffcdc048de00d52c59f527ed31aff85acac0197113b6aebc60",
   "run_periods": {
     "Q8_0": {
       "first": "2026-10-28T00:05:25.206785+00:00",
@@ -279,5 +279,5 @@
       "last": "2026-10-27T22:56:14.576990+00:00"
     }
   },
-  "analysis_plan_sha256": "b5c099a28a1bf184d8b793c0d13d69f4d8377609ef9a4c76bf12dd37f8f6dde2"
+  "analysis_plan_sha256": "329939e389ddb8770334d535343b21a7f85dc199640175f7c8c48a106c1848c5"
 }

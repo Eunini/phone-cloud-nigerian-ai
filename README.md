@@ -1,21 +1,21 @@
 # Quantization and language: a paired AfriXNLI analysis
 
-**One model, one task, two languages, two released GGUF configurations.**
+I compare Q4_K_M and Q8_0 versions of Qwen2.5-1.5B-Instruct on matched English and Yoruba AfriXNLI questions.
 
 I narrowed this study on **2 November 2026** after inspecting the broader benchmark results. This is an exploratory analysis for methodological review, not a preregistered experiment or a completed paper.
 
 ## Question
 
-For Qwen2.5-1.5B-Instruct on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?
+Does the change in AfriXNLI accuracy from Q8_0 to Q4_K_M differ between Yoruba and English for Qwen2.5-1.5B-Instruct?
 
-## Bounded finding
+## Results
 
-On **300 parallel questions**, the estimated Yoruba-minus-English difference in accuracy change is **+1.67 percentage points**, with a nominal paired 95% interval of **−0.67 to +4.33**. The interval spans zero. These records do not establish a greater Yoruba compression penalty or equivalence.
+I compared the Q4-minus-Q8 accuracy change in each language using **300 matched question pairs**. The difference between the two changes is **+1.67 percentage points**, with a paired 95% bootstrap interval of **-0.67 to +4.33**. The interval includes zero, so I cannot conclude that Yoruba had a greater compression penalty. This also does not show that the configurations are equivalent.
 
 | Input language | Q8_0 | Q4_K_M |
 | --- | ---: | ---: |
-| English | 195 / 300 · 65.00% | 195 / 300 · 65.00% |
-| Yoruba | 104 / 300 · 34.67% | 109 / 300 · 36.33% |
+| English | 195 / 300 (65.00%) | 195 / 300 (65.00%) |
+| Yoruba | 104 / 300 (34.67%) | 109 / 300 (36.33%) |
 
 ![Accuracy and paired contrasts](report/focused-study/paired-analysis.png)
 
@@ -25,7 +25,7 @@ On **300 parallel questions**, the estimated Yoruba-minus-English difference in 
 
 The existing records match the selected parallel questions, original scorer, English instructions/answer labels, output budget, pinned runtime binary and recorded two-thread CPU setup. The analysis independently rescores every response, verifies hashes, retains failures and resamples all four outcomes together by question ID.
 
-The configurations ran sequentially on different dates on a shared server. Q4_K_M and Q8_0 differ in recipe as well as nominal precision; Q8_0 is also compressed. Full upstream conversion/calibration lineage is not recorded. The benchmark translations have not received an independent native audit in this study. I therefore make no pure bit-width, general language-understanding, latency or cost claim.
+The configurations ran on different dates on a shared server. Q4_K_M and Q8_0 use different recipes, and Q8_0 is compressed too. I do not have the full record of the starting weights, conversion and calibration. The translations have not received an independent native-speaker audit in this study. These limits prevent conclusions about bit width alone, general language understanding, latency or cost.
 
 ## Review materials
 
@@ -34,7 +34,7 @@ The configurations ran sequentially on different dates on a shared server. Q4_K_
 - [Results, uncertainty and class-level diagnostics](report/focused-study/results.md)
 - [Machine-readable results](report/focused-study/results.json) and [300 paired outcomes](report/focused-study/paired-results.csv)
 - [Analysis specification](report/focused-study/analysis-plan.json) and [hashed runtime evidence](report/focused-study/provenance.json)
-- [Proposed confirmation using the unused 300-question complement](report/focused-study/confirmation-plan.json)—no confirmation predictions collected
+- [Proposed confirmation using the unused 300-question complement](report/focused-study/confirmation-plan.json). No confirmation predictions collected.
 
 ## Reproduce
 
@@ -48,8 +48,8 @@ python -m bench.focused_review
 pytest -q
 ```
 
-Data preparation reads revision-pinned public IrokoBench datasets and must reproduce the original audited selection hash. The two analysis commands make no model requests. They verify immutable Q4/Q8 run snapshots, regenerate paired metrics/CSV/chart, and build the review note. The PDF renderer uses DejaVu Sans fonts; its font directory is configurable.
+Data preparation reads revision-pinned public IrokoBench datasets and must reproduce the original audited selection hash. The two analysis commands make no model requests. They check the saved Q4 and Q8 run files against their recorded hashes, regenerate the metrics, paired CSV and figure, and build the review note. The PDF renderer uses DejaVu Sans fonts; its font directory is configurable.
 
 ## Earlier exploratory benchmark
 
-The wider CPU/GPU/API inventory, mobile-payload cost scenarios, other tasks/models and translation intervention are documented in the [archived broader overview](report/broad-benchmark-overview.md), [dated report](report/report.md), [original CPU protocol](report/workspace-protocol.md) and [completion tracker](report/completion.md). Their observations are not pooled into this analysis. Phone/laptop measurement remains outside the workspace study. The raw observations, original protocol and historical counts are preserved.
+The earlier CPU, GPU and API comparisons, mobile-data cost estimates, other tasks and translation experiment are documented in the [archived broader overview](report/broad-benchmark-overview.md), [dated report](report/report.md), [original CPU protocol](report/workspace-protocol.md) and [completion tracker](report/completion.md). Those extra runs do not enter this paired analysis. Phone/laptop measurement remains outside the workspace study. The raw observations, original protocol and historical counts are preserved.

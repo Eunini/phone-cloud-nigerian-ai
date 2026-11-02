@@ -12,43 +12,57 @@ def interval(value):
 
 
 def markdown(result):
+    names = {"eng": "English", "yor": "Yoruba"}
+    eng = result["paired_correctness_concordance"]["eng"]
+    yor = result["paired_correctness_concordance"]["yor"]
     lines = [
-        "# Paired AfriXNLI analysis: results",
+        "# Results",
         "",
-        "**Inioluwa Atanda · 2 November 2026 · Exploratory; no new inference.**",
+        "Inioluwa Atanda",
         "",
-        "## One bounded finding",
+        "2 November 2026",
         "",
-        "The estimated Yoruba-minus-English difference in Q4_K_M-minus-Q8_0 "
-        f"accuracy change is **{interval(result['contrasts']['interaction'])}** "
-        "on 300 parallel questions. The nominal paired 95% interval spans zero. "
-        "These records do not establish a greater Yoruba compression penalty, "
-        "equivalence, or a causal effect of bit width.",
+        "I compared Q4_K_M and Q8_0 versions of Qwen2.5-1.5B-Instruct on 300 matched "
+        "English and Yoruba AfriXNLI questions. This is a reanalysis of existing answers. "
+        "I chose the narrower question after examining the broader benchmark results.",
+        "",
+        "## Accuracy",
         "",
         "| Input language | Configuration | Correct / 300 | Accuracy | Failed attempts |",
         "| --- | --- | ---: | ---: | ---: |",
     ]
     for cell in result["cells"]:
         lines.append(
-            f"| {cell['language']} | {cell['quantization']} | {cell['correct']} / "
+            f"| {names[cell['language']]} | {cell['quantization']} | {cell['correct']} / "
             f"{cell['n']} | {cell['accuracy_percent']:.2f}% | {cell['failed_attempts']} |"
         )
-    lines += ["", "| Paired contrast | Estimate and nominal 95% interval |", "| --- | --- |"]
+    lines += [
+        "",
+        "For each language, I subtracted Q8 accuracy from Q4 accuracy. I then "
+        "subtracted the English change from the Yoruba change. The estimated difference "
+        f"is **{interval(result['contrasts']['interaction'])}**. The paired 95% bootstrap "
+        "interval includes zero, so I cannot conclude that Yoruba had a greater "
+        "compression penalty. This also does not show that the configurations are equivalent.",
+        "",
+        "| Comparison | Estimate and 95% bootstrap interval |",
+        "| --- | --- |",
+    ]
     for key, label in [
         ("eng", "English: Q4 minus Q8"),
         ("yor", "Yoruba: Q4 minus Q8"),
-        ("interaction", "Yoruba change minus English change (primary)"),
+        ("interaction", "Yoruba change minus English change"),
     ]:
         lines.append(f"| {label} | {interval(result['contrasts'][key])} |")
     lines += [
         "",
-        "![Paired accuracy and contrast intervals](paired-analysis.png)",
+        "![Accuracy and paired differences](paired-analysis.png)",
         "",
-        "Equal English accuracy does not mean identical answers: four questions "
-        "are correct only in Q4, and four only in Q8. For Yoruba those counts are "
-        "six and one. Pairing retains this information.",
+        f"English has {eng['q4_only_correct']} questions answered correctly only by Q4 and "
+        f"{eng['q8_only_correct']} only by Q8. The corresponding Yoruba counts are "
+        f"{yor['q4_only_correct']} and {yor['q8_only_correct']}. Keeping the outcomes paired "
+        "shows which questions changed, even when the overall accuracy stayed the same.",
         "",
-        "## Class-level failure",
+        "## Neutral-class errors",
         "",
         "| Language | Configuration | Entailment recall | Neutral recall | Contradiction recall |",
         "| --- | --- | ---: | ---: | ---: |",
@@ -56,62 +70,70 @@ def markdown(result):
     for cell in result["cells"]:
         recall = cell["class_recall_percent"]
         lines.append(
-            f"| {cell['language']} | {cell['quantization']} | "
+            f"| {names[cell['language']]} | {cell['quantization']} | "
             f"{recall['entailment']:.2f}% | {recall['neutral']:.2f}% | "
             f"{recall['contradiction']:.2f}% |"
         )
     lines += [
         "",
-        "Both Yoruba configurations make zero neutral predictions. English neutral "
-        "recall is also poor. Each language has 99 entailment, 102 neutral and 99 "
-        "contradiction gold labels; the observed majority-label baseline is 34%. "
-        "Yoruba predictions heavily favour entailment. This limits what a "
-        "quantization comparison near that baseline can tell us.",
+        "Neither Yoruba configuration predicts neutral. English neutral recall is "
+        "poor too. Each language has 99 entailment, 102 neutral and 99 contradiction "
+        "reference labels. Always choosing the most common label would score 34% on "
+        "this sample. The Yoruba scores are close to that baseline, and most Yoruba "
+        "predictions are entailment. This limits what I can learn about quantization "
+        "from this model and task.",
         "",
-        "I have not established whether this pattern comes from model capability, "
-        "the English-instruction prompt, benchmark translations or another source. "
-        "I did not change the prompt or select a more forgiving parser after seeing it.",
+        "I have not established whether the cause is model capability, the English "
+        "instructions, the benchmark translations or something else. I kept the "
+        "original prompt and answer parser throughout this analysis.",
         "",
-        "## Format, tokens and request failures",
+        "## Answer format, token limits and failed requests",
         "",
-        "All 1,200 final responses are parseable under the original scorer, and none "
-        "stops at the output token cap. There is one failed English Q8 request before "
-        "a successful retry: 1,201 attempts, 1,200 final responses, 300 paired clusters. "
-        "The failure remains in the immutable source log. Invalid-format answers and "
-        "output caps therefore do not explain these four observed accuracy values.",
+        "The scorer can read all 1,200 final responses, and none stops at the output "
+        "token limit. One English Q8 request failed before a successful retry. That "
+        "gives 1,201 attempts for 1,200 final responses, grouped into 300 question "
+        "pairs. The failed attempt remains in the source log. Unreadable answers "
+        "and output limits therefore do not explain these four accuracy values.",
         "",
-        "Reported prompt-token ranges are 72–124 for English and 92–281 for Yoruba "
-        "in both configurations. Equal output budgets do not equalise input tokenisation. "
-        "The setup uses English instructions and answer labels with translated premises "
-        "and hypotheses; it is not a fully Yoruba interaction.",
+        "Reported prompt lengths are 72 to 124 tokens for English and 92 to 281 for "
+        "Yoruba, with the same counts in both configurations. Equal output limits "
+        "do not make the input token counts equal. Instructions and answer labels "
+        "are in English; the premise and hypothesis are in the assigned language.",
         "",
-        "## Interpretation limits",
+        "## What the results can establish",
         "",
-        "I chose this narrower analysis after inspecting the broader results. The "
-        "conditions ran sequentially on different dates on shared hardware. The paired "
-        "bootstrap captures question variation, not execution drift or repeat variability. "
-        "Both artifacts share a pinned official GGUF release, but their complete upstream "
-        "conversion/calibration lineage is not recorded. Q4_K_M and Q8_0 are different "
-        "quantization recipes; Q8_0 is not an uncompressed control. AfriXNLI translation "
-        "quality has not received an independent native audit in this study.",
+        "The two configurations ran one after the other on different dates on a "
+        "shared host. The bootstrap describes variation across questions in those "
+        "recorded runs. It does not cover changes in host activity or differences "
+        "between repeated runs. I also chose this narrower question after examining "
+        "the broader results.",
         "",
-        "## What I changed and what remains",
+        "Both model files come from the same pinned official GGUF release, but I "
+        "do not have the full record of the starting weights, conversion and "
+        "calibration. Q4_K_M and Q8_0 use different recipes, and Q8_0 is compressed "
+        "too. The comparison cannot isolate the effect of bit width. The AfriXNLI "
+        "translations have not received an independent native-speaker audit in "
+        "this study.",
         "",
-        "I have narrowed the question, matched the four cells by question ID, independently "
-        "rescored outputs, added paired intervals and class diagnostics, preserved failures, "
-        "and excluded provider/hardware/cost comparisons from the main claim. Raw "
-        "observations and the earlier wider protocol are unchanged.",
+        "## Before a confirmation run",
         "",
-        "I reserved the disjoint 300-question complement for a possible fresh confirmation. "
-        "No confirmation run has happened. Balanced condition order, a reserved host, "
-        "conversion provenance, repeat checks and translation review remain design work "
-        "to resolve before that experiment. The holdout is from the same benchmark.",
+        "I have listed the other 300 parallel questions from the same benchmark. "
+        "They do not overlap with the questions analysed here. I have not run "
+        "confirmation inference on them. Before doing so, I would agree the block "
+        "order and repeated subset, use a reserved host, record how both model "
+        "files were produced and arrange a translation review.",
         "",
-        "See [the revised protocol](protocol.md), [analysis plan](analysis-plan.json), "
-        "[runtime evidence](provenance.json), [confirmation proposal](confirmation-plan.json) "
-        "and [paired outcomes](paired-results.csv). Run `python -m bench.focused_nli` "
-        "and `python -m bench.focused_review` from the repository root. No model "
-        "requests are made by either command.",
+        "The original observations and broader protocol are unchanged. This "
+        "revision changes the question and analysis, rather than adding a new "
+        "experiment.",
+        "",
+        "## Data and code",
+        "",
+        "See the [protocol](protocol.md), [analysis settings](analysis-plan.json), "
+        "[runtime records](provenance.json), [confirmation proposal](confirmation-plan.json) "
+        "and [paired outcomes](paired-results.csv). From the repository root, run "
+        "`python -m bench.focused_nli` followed by `python -m bench.focused_review`. "
+        "Neither command sends requests to a model.",
     ]
     return "\n".join(lines) + "\n"
 
@@ -178,17 +200,17 @@ def render_pdf(result, folder, font_dir):
         )
         story.extend([value, Spacer(1, 10)])
 
-    p("Quantization and language:<br/>a focused AfriXNLI analysis", title)
+    p("Q4 and Q8 accuracy<br/>in Yoruba and English", title)
     p(
-        "<b>Inioluwa Atanda · 2 November 2026</b><br/>Exploratory revision for methodological review. Not preregistered or peer reviewed.",
+        "<b>Inioluwa Atanda</b><br/>2 November 2026<br/>Exploratory analysis. Not preregistered or peer reviewed.",
         small,
     )
-    p("One question", heading)
+    p("Research question", heading)
     p(
-        "For the released Qwen2.5-1.5B-Instruct GGUF artifacts, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?"
+        "Does the change in AfriXNLI accuracy from Q8_0 to Q4_K_M differ between Yoruba and English for Qwen2.5-1.5B-Instruct?"
     )
     p(
-        "I have narrowed the earlier multi-provider benchmark to one model, one task, two languages and two released configurations. This note re-analyses existing observations; it contains no new model inference."
+        "I compare two published GGUF versions of Qwen2.5-1.5B-Instruct on AfriXNLI. I chose this narrower question after examining the wider benchmark results. This note uses existing answers. I have not collected new model responses for it."
     )
     table(
         [
@@ -198,44 +220,44 @@ def render_pdf(result, folder, font_dir):
         ],
         [90, 200, 209],
     )
-    p("Design and primary outcome", heading)
+    p("Method", heading)
     p(
-        "The primary contrast is the Yoruba Q4-minus-Q8 accuracy change minus the English change. Negative values mean a greater measured Yoruba loss. Each parallel question carries all four outcomes: 300 paired clusters, not 1,200 independent questions."
+        "For each language, I subtract Q8 accuracy from Q4 accuracy. I then subtract the English change from the Yoruba change. A negative result would mean a worse change for Yoruba. Each question has four related outcomes, so the analysis keeps 300 question pairs together."
     )
     p(
-        "Both artifacts share a pinned official GGUF release. The recorded workspace, runtime binary, CPU-only two-thread settings, 2,048-token context, English instructions/labels, greedy decoding, seed, 128-token answer budget and strict scorer are matched. For each item I also check that request sizes and reported prompt-token counts match between configurations."
+        "Both model files come from the same version of the official GGUF release. The records specify the same workspace, runtime binary, two-thread CPU setup, 2,048-token context, English instructions and labels, greedy decoding, seed, 128-token output limit and answer scorer. I also check that request sizes and prompt-token counts agree between configurations for each item."
     )
     p(
-        "I independently reparse and rescore the responses, reject duplicate successful answers or missing cells, and preserve request failures. I resample parallel IDs jointly for 10,000 bootstrap replicates, seed 20261102, and report nominal 95% percentile intervals. These intervals are conditional on the recorded runs."
+        "I parse and score the selected answers again, check them against the stored results and retain request failures. I reject missing outcomes and repeated successful responses. The uncertainty estimates use 10,000 bootstrap samples, seed 20261102, with all four outcomes for a question sampled together. I report 95% percentile intervals for these recorded runs."
     )
-    p("Boundaries", heading)
+    p("Limits of the existing runs", heading)
     p(
-        "The scope was narrowed after results were inspected. The original conditions ran sequentially on different dates on a shared host. The full upstream conversion/calibration chain is not recorded. Q8_0 is compressed; the recipes differ as well as nominal precision. This is an exploratory comparison of released configurations, not a pure causal bit-width experiment."
+        "The configurations ran on different dates on a shared host, and their order was not randomised. I do not have the full history of the original weights, conversion and calibration. Q8_0 is also compressed, and the recipes differ as well as nominal precision. These records cannot isolate the effect of bit width."
     )
     p(
-        "I exclude other tasks, languages, model families, GPU/API providers, translation pipelines and timing repeats. I make no serving-cost, latency, phone or production claim."
+        "Other tasks, languages, models, providers, translation pipelines and timing repeats are outside this analysis. I do not use the results to draw conclusions about serving cost, latency, phones or production reliability."
     )
 
     story.append(PageBreak())
-    p("Measured result", title)
+    p("Accuracy and paired differences", title)
     value = result["contrasts"]["interaction"]
     p(
-        "<b>Primary contrast: "
+        "<b>Main comparison: "
         + interval(value)
-        + ".</b> The interval spans zero. These observations do not establish a greater Yoruba compression penalty, equivalence, or a general effect of bit width."
+        + ".</b> The 95% bootstrap interval includes zero. I cannot conclude that Yoruba had a greater compression penalty. This does not show that the configurations are equivalent or establish a general effect of bit width."
     )
     rows = [["Language", "Configuration", "Correct / 300", "Accuracy"]]
     for cell in result["cells"]:
         rows.append(
             [
-                cell["language"],
+                {"eng": "English", "yor": "Yoruba"}[cell["language"]],
                 cell["quantization"],
                 str(cell["correct"]),
                 f"{cell['accuracy_percent']:.2f}%",
             ]
         )
     table(rows, [85, 135, 140, 139])
-    rows = [["Paired contrast", "Estimate [nominal 95% interval]"]]
+    rows = [["Paired contrast", "Estimate [95% bootstrap interval]"]]
     for key, name in [
         ("eng", "English: Q4 minus Q8"),
         ("yor", "Yoruba: Q4 minus Q8"),
@@ -245,22 +267,22 @@ def render_pdf(result, folder, font_dir):
     table(rows, [270, 229])
     story.append(Image(str(folder / "paired-analysis.png"), width=499, height=202))
     p(
-        "The bootstrap resamples all four outcomes together. Equal English accuracy still hides answer changes: four questions are correct only in Q4 and four only in Q8. The corresponding Yoruba counts are six and one. These are question-level observations from single recorded condition runs.",
+        "The English configurations have the same overall accuracy, but four questions are answered correctly only by Q4 and four only by Q8. The corresponding Yoruba counts are six and one. The bootstrap keeps the related answers together when sampling questions.",
         small,
     )
     p(
-        "All 1,200 final responses are parseable, and none stops at the output token cap. One English Q8 request failed before a successful retry; that attempt remains in the raw log. Formatting failure and output caps therefore do not explain the four accuracy values."
+        "The scorer can read all 1,200 final responses, and none stops at the output token limit. One English Q8 request failed before a successful retry. That attempt remains in the source log. Answer format and output limits therefore do not explain these accuracy values."
     )
 
     story.append(PageBreak())
-    p("Diagnostics and remaining controls", title)
-    p("Class bias limits interpretation", heading)
+    p("Errors and remaining checks", title)
+    p("Neutral-class results", heading)
     table(
         [
             ["Language", "Configuration", "Neutral recall"],
             *[
                 [
-                    cell["language"],
+                    {"eng": "English", "yor": "Yoruba"}[cell["language"]],
                     cell["quantization"],
                     f"{cell['class_recall_percent']['neutral']:.2f}%",
                 ]
@@ -270,30 +292,30 @@ def render_pdf(result, folder, font_dir):
         [110, 190, 199],
     )
     p(
-        "Neither Yoruba configuration ever predicts neutral. English neutral recall is poor too. Gold counts are identical across languages: 99 entailment, 102 neutral and 99 contradiction; the observed majority-label baseline is 34%. Yoruba predictions heavily favour entailment. I have not established whether the cause is model capability, prompting, translations or another source."
+        "Neither Yoruba configuration predicts neutral. English neutral recall is poor too. Each language has 99 entailment, 102 neutral and 99 contradiction reference labels. Always choosing the most common label would score 34% on this sample. Most Yoruba predictions are entailment. I have not established whether the cause is model capability, prompting, translations or something else."
     )
     p(
-        "Reported prompt-token ranges are 72–124 in English and 92–281 in Yoruba. The study uses English instructions and labels with translated premises/hypotheses. I did not change the prompt or relax the parser after observing the failures."
+        "Reported prompt lengths are 72 to 124 tokens in English and 92 to 281 in Yoruba. Instructions and labels are in English; the premise and hypothesis are in the assigned language. I kept the original prompt and answer parser."
     )
-    p("What still needs a fresh design", heading)
+    p("Before a confirmation run", heading)
     p(
-        "A shared host and sequential collection leave execution-order and contention confounding. Question bootstrap intervals do not capture this, run-to-run variation, translation error or post-hoc selection. The official artifact revision is pinned, but the full common unquantized-weight/conversion lineage needs recording for a compression-process claim. Independent native review of these benchmark translations has not been completed; the agent-safety volunteers reviewed a different dataset."
+        "The intervals describe variation across questions in the existing runs. They do not cover changes in host activity, differences between repeated runs, translation errors or the decision to narrow the question after seeing results. I also need a fuller record of the starting weights and conversion steps. These benchmark translations have not received an independent native-speaker audit in this study. The agent-safety volunteers reviewed a different dataset."
     )
     p(
-        "I have reserved the unused 300-question complement of the same 600-row benchmark. No confirmation inference has happened. The proposal is to freeze a bounded execution plan on a reserved host, document common conversion lineage, balance configuration order across question blocks, preserve all failures and preselect a repeat-agreement check. Block order and repeated-subset IDs are not frozen yet. This is a within-benchmark holdout, not an independent corpus."
+        "I have listed the other 300 parallel questions from the same 600-row benchmark. They do not overlap with this analysis, and I have not run confirmation inference on them. Before doing so, I would agree the block order and repeated subset, use a reserved host, record how both model files were produced, balance which configuration runs first and retain every failed request. Those execution details are not finalised. The questions come from the same benchmark, rather than a separate corpus."
     )
-    p("What I would like reviewed", heading)
+    p("Questions for review", heading)
     p(
-        "Is the language-by-configuration contrast an appropriate focused target? Given the severe class bias, should a separate development phase establish a suitable prompt/model before any confirmatory run?"
+        "Does this comparison address a useful question? Given the poor class behaviour, should I first establish a suitable model and prompt in a separate development phase before running confirmation?"
     )
-    p("Evidence and reproduction", heading)
+    p("Data and code", heading)
     url = "https://github.com/Eunini/phone-cloud-nigerian-ai/tree/main/report/focused-study"
     p(
-        f'<link href="{url}" color="#18766e">Protocol, immutable input hashes, paired outcomes, diagnostics and analysis code</link>.',
+        f'<link href="{url}" color="#18766e">Protocol, results, source hashes and analysis code</link>.',
         small,
     )
     p(
-        "From the repository root: install the project with its dev and review extras; run python -m bench.data, python -m bench.focused_nli, python -m bench.focused_review and pytest -q. Data preparation retrieves the pinned benchmark; the analysis makes no model requests. The original run files and broad protocol remain unchanged.",
+        "From the repository root, install the dev and review extras, then run python -m bench.data, python -m bench.focused_nli, python -m bench.focused_review and pytest -q. Data preparation reads the pinned benchmark. The analysis sends no requests to a model. The original run files and earlier protocol are unchanged.",
         small,
     )
     pages = []
@@ -314,7 +336,7 @@ def render_pdf(result, folder, font_dir):
         topMargin=42,
         bottomMargin=50,
         author="Inioluwa Atanda",
-        title="Quantization and language: focused AfriXNLI review note",
+        title="Q4 and Q8 accuracy in Yoruba and English",
     )
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     if max(pages) != 3:

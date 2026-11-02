@@ -1,60 +1,78 @@
-# Revised study: quantization configuration and language on AfriXNLI
+# Comparing Q4 and Q8 on Yoruba and English AfriXNLI
 
-**Inioluwa Atanda · 2 November 2026 · Exploratory analysis, prepared after inspecting the broader results.**
+Inioluwa Atanda
 
-## One question
+2 November 2026
 
-For the released Qwen2.5-1.5B-Instruct GGUF artifacts on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?
+I chose this narrower question after examining the broader benchmark results. The analysis is exploratory and was not preregistered.
 
-I have narrowed the research question to one model, one task, two languages and two released quantization configurations. The earlier multi-provider benchmark remains a separate exploratory inventory. I am not using it to attribute an effect to language or compression.
+## Research question
 
-## Four conditions and one primary contrast
+Does the change in AfriXNLI accuracy from Q8_0 to Q4_K_M differ between Yoruba and English for Qwen2.5-1.5B-Instruct?
+
+I compare two published GGUF versions of the same model. The earlier benchmark also covered other models, tasks and providers. Those results remain available, but they are outside this comparison.
+
+## Questions and configurations
 
 | Input language | Q8_0 | Q4_K_M |
 | --- | --- | --- |
 | English | 300 selected AfriXNLI questions | The same 300 questions |
 | Yoruba | Their 300 parallel translations | The same 300 translations |
 
-The primary contrast is the Yoruba Q4-minus-Q8 accuracy change minus the English Q4-minus-Q8 change. A negative value means a greater measured Yoruba loss. The question allows either direction or an uncertain result; I am not assuming compression must harm Yoruba more.
+For each language, I subtract Q8 accuracy from Q4 accuracy. I then subtract the English change from the Yoruba change. A negative result would mean that the change was worse for Yoruba.
 
-The unit is the **parallel question ID**, giving 300 four-outcome clusters, not 1,200 independent questions. Dataset revision, row indices, gold labels, run files and model artifacts are pinned in [the analysis plan](analysis-plan.json). I require matching gold labels across parallel items. This checks label alignment, not translation quality.
+Each question has four related outcomes: one for each language and configuration. I keep those four outcomes together throughout the analysis. There are 300 question pairs, rather than 1,200 independent questions.
 
-## What the existing records hold fixed
+The [analysis plan](analysis-plan.json) records the dataset version, question IDs, reference labels, run files and model files. The reference labels must agree between the English and Yoruba versions. Matching labels alone do not verify the translations.
 
-- Qwen2.5-1.5B-Instruct model family and parameter count. Both released artifacts come from the same pinned official GGUF repository revision.
-- Recorded workspace, llama.cpp revision and server binary; CPU-only inference, two inference/batch threads, one slot and a 2,048-token context.
-- Original selected question IDs, English instruction template and English answer labels. Only the premise and hypothesis change language.
-- Greedy decoding, recorded server seed 2026, 128-token output budget and original strict scorer. Matching serialized request sizes and reported prompt-token counts are checked between configurations for each item.
+## Settings checked in the existing runs
 
-Q4_K_M and Q8_0 change the quantization recipe as well as nominal precision. Q8_0 is compressed too. I therefore compare these **released configurations**, not a pure bit-width intervention or an uncompressed baseline. The full upstream unquantized-weight/conversion/calibration chain was not recorded. Shared-host contention and collection date/order were not controlled. The existing records support a paired exploratory comparison, not a fully randomised causal experiment.
+- Both model files come from the same version of the official Qwen GGUF repository and have the same model family and parameter count.
+- The records specify the same workspace, llama.cpp version and server binary. They use CPU inference, two inference threads, two batch threads, one request slot and a context size of 2,048 tokens.
+- Both configurations receive the same selected questions, English instructions and English answer labels. The premise and hypothesis are in the assigned language.
+- The runs use greedy decoding, server seed 2026, a 128-token output limit and the original answer scorer. For each item, I check that the recorded request sizes and prompt-token counts agree between configurations.
 
-The copied, hashed runtime receipts are in [provenance.json](provenance.json). Reusing identical setup metadata does not establish identical physical CPU availability at every request.
+Q4_K_M and Q8_0 use different quantization recipes as well as different nominal precision. Q8_0 is also compressed. The available records therefore compare two released configurations. They do not isolate the effect of bit width or provide an uncompressed baseline.
 
-## Scoring and uncertainty
+I do not have the full record of the original weights, conversion steps and calibration used to produce the two files. The runs also took place on different dates on a shared server. Their order was not randomised, and other activity on the host was not controlled.
 
-I independently reparse and rescore every selected response against the original gold answer. Stored predictions and correctness must agree. Successful wrong answers are never replaced. I reject missing question cells, repeated successful answers, mixed run identities, changed input hashes and unfinished retry sequences. The original retry ceiling is three attempts; terminal request failures count as wrong, while every failed attempt remains recorded.
+The [runtime records](provenance.json) include hashes of the original logs and settings. Repeated setup metadata does not prove that the same amount of physical CPU capacity was available for every request.
 
-The primary outcome is strict task accuracy. I separately report unparseable successful responses, output-cap stops, failed attempts, label frequencies, confusion matrices and class recall. Conditional accuracy among parseable responses is diagnostic only; it does not replace the fixed denominator.
+## Scoring
 
-I use 10,000 bootstrap samples, seed 20261102, resampling parallel IDs with all four outcomes together. Intervals are nominal 95% percentile intervals. They describe question-sampling variation conditional on these recorded runs. They do not account for post-hoc scope selection, translation errors, run-to-run variation, shared-host drift or model families. An interval containing zero establishes neither no effect nor equivalence. I specify no equivalence margin or formal equivalence test.
+I parse each selected response again and compare it with the original reference answer. The recalculated prediction and correctness must agree with the stored values.
 
-## Scope boundaries
+A successful wrong answer is kept. I reject missing question outcomes, repeated successful responses, mixed run IDs, changed input hashes and unfinished retry sequences. The original limit is three attempts per item. An item that still fails after those attempts counts as wrong, and all failed attempts remain recorded.
 
-I exclude Hausa, Igbo, other tasks/models, GPU/API endpoints, translation pipelines, timing repeats and warmups from this analysis. I make no latency, serving-cost, phone, production-reliability or general Yoruba-understanding claim. The larger matrix can provide context without supplying extra independent observations here.
+The main score is accuracy across all selected items. I also report responses the parser cannot read, output-limit stops, request failures, prediction frequencies, confusion matrices and recall for each class. Accuracy calculated only on readable answers is a separate diagnostic and does not replace the main denominator.
 
-The agent-safety volunteers reviewed a different prompt set. Their work is not evidence that these AfriXNLI translations are accurate. Pretraining exposure to benchmark material is also not established by this audit.
+## Uncertainty
 
-## Fresh confirmation proposed for review
+I draw 10,000 bootstrap samples using seed 20261102. Each sample draws parallel question IDs with replacement and keeps the four outcomes for an ID together. I report 95% percentile intervals.
 
-I have recorded the unused complement of the original 600-row AfriXNLI test set: **300 additional parallel question IDs**, disjoint from this analysis, in [confirmation-plan.json](confirmation-plan.json). No confirmation predictions have been collected for this revision. This is a within-benchmark holdout, not an independent corpus.
+These intervals describe variation across questions in the recorded runs. They do not cover changes in translations, hardware availability, run-to-run behaviour or the decision to narrow the question after seeing results. The intervals are exploratory and should be interpreted with those limits in mind.
 
-Before fresh inference, I would freeze a bounded execution plan with a reserved host, documented common conversion lineage, balanced configuration order across question blocks, identical settings, complete failures, and a predetermined repeat-agreement check. The block order and repeat subset are not yet frozen; this is a proposal for review, not a registered or completed confirmatory experiment. A causal claim about bit width alone would require a separate matched-algorithm design.
+An interval that includes zero does not show that the configurations are equivalent. I have not specified an equivalence margin or carried out an equivalence test.
 
-I would value review of two decisions: whether the language-by-configuration contrast is the right target, and whether the severe class bias makes this model/prompt unsuitable for a confirmatory study without a separate development phase.
+## Limits of the comparison
 
-## Reproduce
+This analysis covers English and Yoruba AfriXNLI only. It excludes other tasks, languages, models, GPU and API endpoints, translation pipelines, timing repeats and warmup requests. I do not use it to make claims about latency, serving cost, phones, production reliability or general Yoruba understanding.
 
-From the repository root, rebuild the original audited selection and verify its hash:
+The AfriXNLI translations have not received an independent native-speaker audit in this study. The agent-safety volunteers reviewed a different set of prompts. This analysis also does not establish whether the model encountered benchmark material during pretraining.
+
+## Proposed confirmation run
+
+The original AfriXNLI test set has 600 rows. I have listed the other 300 parallel question IDs in [confirmation-plan.json](confirmation-plan.json). They do not overlap with the questions used here. I have not collected confirmation predictions for them. They are a holdout from the same benchmark, rather than a separate corpus.
+
+Before running that experiment, I would agree the execution and scoring rules, use a reserved host, document how both model files were produced and balance which configuration runs first across question blocks. I would retain every failed request and choose a repeated subset in advance to check agreement between runs.
+
+The block order, repeated subset and runtime budget have not been finalised. This is a proposal for review. A claim about bit width alone would need a separate design using a matched quantization algorithm.
+
+I would like feedback on whether this comparison addresses a useful question. I would also like to discuss whether the poor class behaviour calls for a separate development phase to establish a suitable model and prompt before confirmation.
+
+## Reproduction
+
+From the repository root:
 
 ```bash
 pip install -e '.[dev,review]'
@@ -64,4 +82,6 @@ python -m bench.focused_review
 pytest -q
 ```
 
-The analysis checks all supplied hashes and generates no model requests. Data preparation reads the pinned public benchmark; the analysis itself is offline. Results are in [results.md](results.md), with [machine-readable metrics](results.json), [paired outcomes](paired-results.csv), and the [review PDF](Inioluwa-Quantization-Review-Note-2026-11-02.pdf).
+Data preparation reads the pinned public benchmark and must reproduce the original selection hash. The analysis then runs offline, checks its input hashes and makes no model requests.
+
+The outputs are [the results note](results.md), [metrics](results.json), [paired outcomes](paired-results.csv), [figure](paired-analysis.png) and [review PDF](Inioluwa-Quantization-Review-Note-2026-11-02.pdf).

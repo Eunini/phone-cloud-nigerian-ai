@@ -1,6 +1,6 @@
 {
   "recorded_at": "2026-11-02T10:04:33.108569+00:00",
-  "scope": "Transcribed, hashed evidence from the original ignored runtime receipts; no new model run",
+  "scope": "Settings copied from the original runtime records, with hashes of those records. No new model run was made.",
   "common_runtime": {
     "evaluation_source_commit": "c75b734e48defc6f19cc0c2d32bd8a944f6b0595",
     "llama_cpp_revision": "6050b467c07a95c7b87debd4ddac2f8ba8d9b807",
@@ -118,6 +118,6 @@
     }
   },
   "normalised_server_commands_match_except_model_file": true,
-  "origin_limit": "Both GGUF files are pinned to the same official repository revision. The complete upstream unquantized-weight/conversion/calibration chain is not recorded; this is a comparison of released artifacts, not an isolated bit-width experiment.",
-  "execution_order_limit": "Conditions were collected sequentially on different dates on a shared virtual host; order and physical contention were not randomised or controlled."
+  "origin_limit": "Both GGUF files come from the same version of the official repository. The full history of the original weights, conversion and calibration is not recorded. This comparison cannot isolate the effect of bit width.",
+  "execution_order_limit": "The configurations ran one after the other on different dates on a shared virtual host. Their order was not randomised, and other activity on the host was not controlled."
 }

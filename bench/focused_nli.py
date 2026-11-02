@@ -260,7 +260,7 @@ def analyse(plan, items_path):
         "paired_correctness_concordance": concordance,
         "primary_contrast": plan["primary_contrast"],
         "bootstrap": plan["bootstrap"],
-        "conditioning": "Intervals resample observed question clusters, not hosts, models, translations or run repetitions. Post-hoc scope selection and execution-order confounding remain.",
+        "conditioning": "The intervals describe question variation in the recorded runs. They do not cover host changes, translation errors or differences between repeated runs. The question was narrowed after results were inspected, and configuration order was not randomised.",
         "input_hashes": {q: plan["conditions"][q]["sha256"] for q in QUANTS},
         "data_sha256": plan["data_sha256"],
         "analysis_code_sha256": sha256(Path(__file__)),
@@ -311,7 +311,7 @@ def plot(result, path):
         linestyle=":",
         color="#777777",
         linewidth=1,
-        label="Observed majority-label baseline (34%)",
+        label="Majority-label baseline (34%)",
     )
     left.set(
         xticks=[0, 1],
@@ -319,13 +319,13 @@ def plot(result, path):
         xlim=(-0.3, 1.3),
         ylim=(0, 100),
         ylabel="Strict task accuracy (%)",
-        title="300 parallel questions per language",
+        title="Accuracy on 300 questions per language",
     )
     left.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), frameon=False, fontsize=8)
     labels = [
-        ("eng", "English: Q4 − Q8"),
-        ("yor", "Yoruba: Q4 − Q8"),
-        ("interaction", "Yoruba change − English change"),
+        ("eng", "English: Q4 minus Q8"),
+        ("yor", "Yoruba: Q4 minus Q8"),
+        ("interaction", "Yoruba change minus English change"),
     ]
     for index, (key, _) in enumerate(labels):
         value = result["contrasts"][key]
@@ -340,13 +340,13 @@ def plot(result, path):
         yticks=list(range(3)),
         yticklabels=[label for _, label in labels],
         xlabel="Accuracy difference (percentage points)",
-        title="Paired contrasts and nominal 95% intervals",
+        title="Paired changes with 95% bootstrap intervals",
     )
     right.invert_yaxis()
     right.margins(y=0.35)
     for axis in (left, right):
         axis.spines[["top", "right"]].set_visible(False)
-    fig.suptitle("One model · two released GGUF recipes · one task", fontsize=13)
+    fig.suptitle("Qwen2.5-1.5B: Q8_0 and Q4_K_M", fontsize=13)
     fig.savefig(path, dpi=180)
     plt.close(fig)
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "created_at": "2026-11-02T10:04:33.108569+00:00",
-  "status": "Exploratory analysis specified after broader results were inspected; not preregistered",
-  "question": "For the released Qwen2.5-1.5B-Instruct GGUF artifacts on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?",
+  "status": "Exploratory analysis. I chose this narrower question after reviewing the broader results. It was not preregistered.",
+  "question": "Does the change in AfriXNLI accuracy from Q8_0 to Q4_K_M differ between Yoruba and English for Qwen2.5-1.5B-Instruct?",
   "base_model": "Qwen2.5-1.5B-Instruct",
   "gguf_repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
   "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
@@ -32,7 +32,7 @@
     }
   },
   "provenance": "report/focused-study/provenance.json",
-  "provenance_sha256": "9588aede5a086b475a163fe665f33e29a5e28f8f9c7bf757c9b2e3c5c6f9d8f8",
+  "provenance_sha256": "43d51e3b9d0e140da5344b6cf6c8979e9f0d11b45af9b53278936745d92b0ad5",
   "prompt_version": "fixed-en-instructions-v1",
   "max_tokens": 128,
   "scorer_sha256": "2580c76313632fb10f2ee237eb40d4214a9c6be40dd53fcf594710a7c299340a",
@@ -41,8 +41,8 @@
     "replicates": 10000,
     "seed": 20261102,
     "confidence": 0.95,
-    "unit": "parallel question ID, resampling all four outcomes together",
-    "interval": "nominal percentile, linear interpolation; exploratory and conditional on these recorded runs"
+    "unit": "Parallel question ID. Each sampled ID keeps its four outcomes together.",
+    "interval": "95% percentile bootstrap with linear interpolation. The intervals are exploratory and describe the recorded runs."
   },
   "primary_contrast": "(Yoruba Q4_K_M - Yoruba Q8_0) - (English Q4_K_M - English Q8_0), in percentage points; negative means a greater measured Yoruba loss",
   "secondary_diagnostics": [

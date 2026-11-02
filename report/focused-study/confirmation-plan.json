@@ -1,6 +1,6 @@
 {
   "created_at": "2026-11-02T10:04:33.108569+00:00",
-  "status": "Proposed for supervisor review; not executed or registered",
+  "status": "Proposal for supervisor review. This experiment has not been run or registered.",
   "dataset": "masakhane/afrixnli",
   "dataset_revision": "e3ca06b30f3e7af2a86f6c8609ea76fee326bc56",
   "source_test_rows": 600,
@@ -609,27 +609,27 @@
     599
   ],
   "reserved_parallel_pairs": 300,
-  "leakage_rule": "Do not use any of the exploratory 300 question IDs for confirmation. Do not inspect model outputs for the reserved complement before freezing the revised execution/scoring protocol. These are held-out items within the same benchmark, not an independent corpus.",
-  "question": "For the released Qwen2.5-1.5B-Instruct GGUF artifacts on this CPU setup, does the Q4_K_M-minus-Q8_0 accuracy change differ between Yoruba and English on AfriXNLI?",
+  "leakage_rule": "Keep the 300 exploratory question IDs out of confirmation. Agree the execution and scoring rules before looking at model outputs for the unused questions. These items come from the same benchmark, rather than an independent corpus.",
+  "question": "Does the change in AfriXNLI accuracy from Q8_0 to Q4_K_M differ between Yoruba and English for Qwen2.5-1.5B-Instruct?",
   "primary_contrast": "(Yoruba Q4_K_M - Yoruba Q8_0) - (English Q4_K_M - English Q8_0), in percentage points; negative means a greater measured Yoruba loss",
   "fixed_components": [
-    "same parent checkpoint and documented conversion provenance",
-    "same pinned runtime/tokenizer/chat template",
-    "same reserved parallel IDs, prompt and parser",
-    "same CPU allocation, context, threads, greedy decoding and output budget"
+    "Use the same parent checkpoint and record how both model files were produced",
+    "Use the same pinned runtime, tokenizer and chat template",
+    "Use the same reserved question IDs, prompt and answer parser",
+    "Keep CPU allocation, context size, threads, greedy decoding and output budget fixed"
   ],
   "minimum_execution_controls": [
-    "Record machine, runtime binary, model and data hashes for every block",
-    "Use one reserved host and preassign balanced Q4/Q8 order across question blocks; preserve each four-cell question cluster",
-    "Record all request failures and retry only transport failures, never successful wrong answers",
-    "Log full request settings and verify neither input nor output is truncated",
-    "Check run-to-run agreement on a predetermined repeated subset; do not pool repeats as independent questions"
+    "Record the machine, runtime binary, model hashes and data hashes for every block",
+    "Use one reserved host and balance which configuration runs first across question blocks. Keep each question and its four outcomes together.",
+    "Record every request failure. Retry transport failures, but keep successful wrong answers.",
+    "Log all request settings and check that inputs and outputs are not cut off",
+    "Choose a repeated subset in advance to check agreement between runs. Keep repeated observations separate from the main question count."
   ],
   "not_yet_done": [
-    "Download and validate reserved parallel items",
-    "Rebuild both artifacts from a single pinned unquantized checkpoint if claiming a compression-process effect",
-    "Freeze block order, repeated-subset IDs and bounded runtime budget before inference",
-    "Collect fresh predictions and compare with the exploratory result"
+    "Download and validate the unused parallel items",
+    "Produce both model files from one pinned unquantized checkpoint before making a claim about the compression process",
+    "Agree block order, repeated question IDs and a runtime limit before inference",
+    "Collect fresh predictions and compare them with the exploratory result"
   ],
-  "scope_limit": "Q4_K_M versus Q8_0 changes the quantization recipe as well as nominal precision; general bit-width causality would need a separate matched-algorithm design. Yoruba benchmark translation quality needs its own audit; the agent-safety reviewers checked a different dataset."
+  "scope_limit": "Q4_K_M and Q8_0 differ in quantization recipe as well as nominal precision. A claim about bit width alone needs a matched-algorithm design. The Yoruba benchmark translations also need their own audit. The agent-safety reviewers checked a different dataset."
 }
