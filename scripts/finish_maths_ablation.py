@@ -38,6 +38,14 @@ def stop_family(pid):
         parent.kill()
 
 
+def worker_alive(pid, started):
+    try:
+        process = psutil.Process(pid)
+        return process.create_time() == started and process.status() != psutil.STATUS_ZOMBIE
+    except psutil.NoSuchProcess:
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pid", type=int, required=True)
@@ -49,7 +57,7 @@ def main():
         raise ValueError("A publication receipt already exists")
     deadline = time.monotonic() + 4.5 * 3600
     started = psutil.Process(args.pid).create_time()
-    while Path(f"/proc/{args.pid}").exists():
+    while worker_alive(args.pid, started):
         if stop_file.exists():
             stop_family(args.pid)
             receipt.write_text('{"published":false,"stopped_by_owner":true}\n')
