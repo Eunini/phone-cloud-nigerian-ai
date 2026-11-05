@@ -58,3 +58,17 @@ that removing constraints must improve performance.
 The runner writes `results.json` progressively and records server shutdown.
 Only a report marked complete with 50 successful responses per condition is a
 completed pilot. No results are claimed in this plan before collection.
+
+The bounded completion monitor waits for server shutdown, verifies every saved
+score against the frozen rules, and publishes only aggregate JSON/Markdown and
+the shutdown receipt. It uses a separate Git worktree, checks the Eunini account,
+and scans the staged report for secrets; existing live benchmark files are never
+staged. A completed answer is never retried. After a genuine two-hour timeout
+with no request errors it may resume missing cases once, for at most two
+two-hour invocations in total. Partial results remain labelled partial.
+
+The monitor also prepares a private blinded answer-review CSV, without automatic
+labels, for later semantic adjudication. It does not claim that this human review
+has happened. To stop the monitored experiment safely, create
+`runs/private/maths-ablation-v1/STOP`; the monitor stops its owned worker/server
+and will not restart or publish the stopped run.
