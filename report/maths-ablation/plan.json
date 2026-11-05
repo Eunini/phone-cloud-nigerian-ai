@@ -1,0 +1,98 @@
+{
+  "created_at": "2026-11-05T21:38:36.521257+00:00",
+  "scope": "Exploratory follow-up on previously evaluated items; not independent confirmation",
+  "model": {
+    "repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "license": "apache-2.0",
+    "files": {
+      "Q4_K_M": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "Q8_0": "qwen2.5-1.5b-instruct-q8_0.gguf"
+    },
+    "quantization": "Q4_K_M",
+    "filename": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+  },
+  "binary_sha256": "eec04b5a3a296d510d9142124cd6a46bb0177994e5afaeb71ffef28fecf1b0b1",
+  "source_sha256": "c9bdac81650e6c4b9c3c6aaf36730df05fe975628149643248c4da946dc3f07f",
+  "selected_ids": [
+    "afrimgsm:eng:184",
+    "afrimgsm:yor:184",
+    "afrimgsm:hau:184",
+    "afrimgsm:ibo:184",
+    "afrimgsm:eng:195",
+    "afrimgsm:yor:195",
+    "afrimgsm:hau:195",
+    "afrimgsm:ibo:195",
+    "afrimgsm:eng:180",
+    "afrimgsm:yor:180",
+    "afrimgsm:hau:180",
+    "afrimgsm:ibo:180",
+    "afrimgsm:eng:62",
+    "afrimgsm:yor:62",
+    "afrimgsm:hau:62",
+    "afrimgsm:ibo:62",
+    "afrimgsm:eng:38",
+    "afrimgsm:yor:38",
+    "afrimgsm:hau:38",
+    "afrimgsm:ibo:38",
+    "afrimgsm:eng:179",
+    "afrimgsm:yor:179",
+    "afrimgsm:hau:179",
+    "afrimgsm:ibo:179",
+    "afrimgsm:eng:70",
+    "afrimgsm:yor:70",
+    "afrimgsm:hau:70",
+    "afrimgsm:ibo:70",
+    "afrimgsm:eng:203",
+    "afrimgsm:yor:203",
+    "afrimgsm:hau:203",
+    "afrimgsm:ibo:203",
+    "afrimgsm:eng:23",
+    "afrimgsm:yor:23",
+    "afrimgsm:hau:23",
+    "afrimgsm:ibo:23",
+    "afrimgsm:eng:28",
+    "afrimgsm:yor:28",
+    "afrimgsm:hau:28",
+    "afrimgsm:ibo:28",
+    "afrimgsm:eng:187",
+    "afrimgsm:yor:187",
+    "afrimgsm:hau:187",
+    "afrimgsm:ibo:187",
+    "afrimgsm:eng:149",
+    "afrimgsm:yor:149",
+    "afrimgsm:hau:149",
+    "afrimgsm:ibo:149",
+    "afrimgsm:eng:210",
+    "afrimgsm:yor:210"
+  ],
+  "seed": 20261105,
+  "conditions": [
+    [
+      "original",
+      128
+    ],
+    [
+      "original",
+      1024
+    ],
+    [
+      "freeform",
+      128
+    ],
+    [
+      "freeform",
+      1024
+    ]
+  ],
+  "context_tokens_all_conditions": 4096,
+  "threads": 2,
+  "gpu_layers": 0,
+  "temperature": 0,
+  "original_prompt_version": "fixed-en-instructions-v1",
+  "free_prompt_prefix": "Solve this maths problem. Explain your solution if helpful.\n\n",
+  "scoring_policy": "Last nonempty line, exactly one numeric literal; no search for the gold answer.\n\n    This is a diagnostic, not a semantic judge. Multiple numbers/equations and\n    fractions require independent review rather than guessing the intended answer.\n    ",
+  "module_sha256": "423f9211772bc1be6118851d8b48a7bd0d56d48637e2b88c99cb8aa8c329f487",
+  "primary_original_results_unchanged": true
+}
